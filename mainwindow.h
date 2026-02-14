@@ -16,14 +16,19 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    //Конструкторы
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    //Методы
+    QString removeSquareBracket(QString s);
+
 private:
+    //Атрибуты
     Ui::MainWindow *ui;
 
 cLoadFiles * LoadFiles;
-//QStringList * qslLines;
+QString qsLine0 = "Винтеркей Серж, Шумилин Артем - Ревизор 21 - Ревизор: возвращение в СССР 21 [Сергей Уделов, 2024, Попаданцы, 64 kbps]";
 
 private slots:
 void execSetStatus(QString s);
