@@ -80,3 +80,26 @@ QStringList cLoadFiles::loadStringListFromFile(const QString& fileName)
 
 //=============================================================================
 
+
+QString cLoadFiles::removeSquareBracket(QString s)
+{
+    QString qsOut = "";
+    int LeftBracketIndex = s.indexOf('[');
+    int RightBracketIndex = s.indexOf(']');
+    QString Acc = s.mid(0,LeftBracketIndex);
+    qDebug() << "Head=" << Acc;
+
+    qsOut += Acc;
+    Acc = s.mid(LeftBracketIndex + 1, (RightBracketIndex - LeftBracketIndex - 1));
+    qDebug() << "Middle=" << Acc;
+
+    qsOut += Acc;
+    Acc = s.mid(RightBracketIndex + 1);
+    qDebug() << "Taille=" << Acc;
+    qsOut += Acc;
+
+    return qsOut;
+}
+
+//=============================================================================
+

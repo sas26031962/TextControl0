@@ -34,26 +34,7 @@ void MainWindow::execActionLoadFromFile(bool x)
 
 void MainWindow::execActionRemoveSquareBrackets(bool x)
 {
-
-    emit setStatus("execActionRemoveSquareBrackets(): " + removeSquareBracket("One_Two_[Tree_Four]_Five"));
-}
-
-QString MainWindow::removeSquareBracket(QString s)
-{
-    QString qsOut = "";
-    int LeftBracketIndex = s.indexOf('[');
-    int RightBracketIndex = s.indexOf(']');
-    QString Acc = s.mid(0,LeftBracketIndex);
-    qDebug() << "Head=" << Acc;
-
-    qsOut += Acc;
-    Acc = s.mid(LeftBracketIndex + 1, (RightBracketIndex - LeftBracketIndex - 1));
-    qDebug() << "Middle=" << Acc;
-
-    qsOut += Acc;
-    Acc = s.mid(RightBracketIndex + 1);
-    qDebug() << "Taille=" << Acc;
-    qsOut += Acc;
-
-    return qsOut;
+    //QString sOut = LoadFiles->removeSquareBracket("One_Two_[Tree_Four]_Five");
+    QString sOut = LoadFiles->removeSquareBracket(qsLine0);
+    emit setStatus("execActionRemoveSquareBrackets(): " + sOut);
 }

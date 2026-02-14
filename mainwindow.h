@@ -21,7 +21,7 @@ public:
     ~MainWindow();
 
     //Методы
-    QString removeSquareBracket(QString s);
+    //QString removeSquareBracket(QString s);
 
 private:
     //Атрибуты

@@ -27,6 +27,7 @@ public:
     //Методы
     void clearLines();
     void appEndItem(QString s);
+    QString removeSquareBracket(QString s);
 
     static bool saveStringListToFile(const QString& fileName, const QStringList& list);
     static QStringList loadStringListFromFile(const QString& fileName);
