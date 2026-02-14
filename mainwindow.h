@@ -28,6 +28,7 @@ cLoadFiles * LoadFiles;
 private slots:
 void execSetStatus(QString s);
 void execActionLoadFromFile(bool x);
+void execActionRemoveSquareBrackets(bool x);
 
 signals:
 void setStatus(QString s);

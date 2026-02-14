@@ -7,10 +7,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    LoadFiles = new cLoadFiles();
+    LoadFiles = new cLoadFiles(ui->textBrowserData);
 
     connect(this, &MainWindow::setStatus, this, &MainWindow::execSetStatus);
     connect(ui->actionLoadFromFile, &QAction::triggered, this, &MainWindow::execActionLoadFromFile);
+    connect(ui->actionRemoveSquareBrackets, &QAction::triggered, this, &MainWindow::execActionRemoveSquareBrackets);
 }
 
 MainWindow::~MainWindow()
@@ -21,16 +22,18 @@ MainWindow::~MainWindow()
 void MainWindow::execSetStatus(QString s)
 {
     qDebug() << s;
+    ui->textBrowserLog->append(s);
 }
 
 void MainWindow::execActionLoadFromFile(bool x)
 {
     QString qsFileName = "./data/Text.txt";
-    QStringList qslList = cLoadFiles::loadStringListFromFile(qsFileName);
-    ui->textBrowser->clear();
-    foreach (auto s, qslList)
-    {
-        ui->textBrowser->append(s);
-    }
-    emit setStatus("execActionLoadFiles() > load: " + QString::number(qslList.count()) + " lines");
+    int n = LoadFiles->loadStringsFromFile(qsFileName);
+    emit setStatus("execActionLoadFiles() > load: " + QString::number(n) + " lines");
+}
+
+void MainWindow::execActionRemoveSquareBrackets(bool x)
+{
+
+    emit setStatus("execActionRemoveSquareBrackets(): " + QString::number(x) + " lines");
 }

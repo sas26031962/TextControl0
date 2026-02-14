@@ -7,7 +7,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QRegularExpression>
-#include <QListWidget>
+#include <QTextBrowser>
 
 #include "classes/cimportfiles.h"
 #include "classes/cinifile.h"
@@ -15,22 +15,22 @@
 class cLoadFiles
 {
     //Атрибуты
-    QListWidget * ListWidget;
-
-    //Методы
-    void appEndItem(QListWidgetItem * item);
+    QTextBrowser * TextBrowser;
 
 public:
+
+    QStringList qslList;
+
     //Конструкторы
-    cLoadFiles();
+    cLoadFiles(QTextBrowser * TextBrowser);
 
     //Методы
-    void install(QListWidget * other);
-
-    void execLoadFilesSignedIsRotated();
+    void clearLines();
+    void appEndItem(QString s);
 
     static bool saveStringListToFile(const QString& fileName, const QStringList& list);
     static QStringList loadStringListFromFile(const QString& fileName);
+    int loadStringsFromFile(const QString& fileName);
 
 };
 
