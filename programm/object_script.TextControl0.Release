@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\cloadfiles.o
+./release\cenvironment.o
+./release\cimportfiles.o
+./release\cinifile.o
+./release\crecord.o
+./release\crecorditem.o
+./release\moc_mainwindow.o
+./release\moc_cimportfiles.o
+);
