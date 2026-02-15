@@ -8,8 +8,9 @@
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QTextBrowser>
+#include <QDebug>
 
-#include "classes/cimportfiles.h"
+#include "classes/cenvironment.h"
 
 class cLoadFiles
 {
