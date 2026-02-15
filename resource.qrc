@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/TXT">
         <file>TODO_List.txt</file>
+        <file>programm/data/Text.txt</file>
     </qresource>
 </RCC>
