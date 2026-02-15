@@ -4,3 +4,9 @@ TextControl0.pro.user
 programm/data/TextOut.txt
 
 programm/data/Text.txt
+
+*.o
+
+programm/debug/moc_mainwindow.cpp
+
+programm/debug/qrc_resource.cpp

@@ -12,6 +12,24 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, &MainWindow::setStatus, this, &MainWindow::execSetStatus);
     connect(ui->actionLoadFromFile, &QAction::triggered, this, &MainWindow::execActionLoadFromFile);
     connect(ui->actionRemoveSquareBrackets, &QAction::triggered, this, &MainWindow::execActionRemoveSquareBrackets);
+
+    QString appPath = QCoreApplication::applicationFilePath();
+    QFileInfo fileInfo(appPath);
+
+//    qDebug() << "Полный путь:" << appPath;
+//    qDebug() << "Директория:" << fileInfo.path();
+//    qDebug() << "Имя файла:" << fileInfo.fileName();
+//    qDebug() << "Базовое имя (без расширения):" << fileInfo.completeBaseName();
+//    qDebug() << "Суффикс (расширение):" << fileInfo.suffix();
+//    qDebug() << "Абсолютный путь:" << fileInfo.absoluteFilePath();
+//    qDebug() << "Канонический путь:" << fileInfo.canonicalFilePath();
+
+    QString qsDirectory = fileInfo.path();
+    int iLastSlashPosition = qsDirectory.lastIndexOf('/');
+    LoadFiles->qsProgramPath = qsDirectory.mid(0, iLastSlashPosition);
+
+    qDebug() << "Path to programm directory:" << LoadFiles->qsProgramPath;
+
 }
 
 MainWindow::~MainWindow()
@@ -27,7 +45,7 @@ void MainWindow::execSetStatus(QString s)
 
 void MainWindow::execActionLoadFromFile(bool x)
 {
-    QString qsFileName = "./data/Text.txt";
+    QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
     int n = LoadFiles->loadStringsFromFile(qsFileName);
     emit setStatus("execActionLoadFiles() > load: " + QString::number(n) + " lines");
 }
@@ -42,8 +60,7 @@ void MainWindow::execActionRemoveSquareBrackets(bool x)
         QString sOut = LoadFiles->removeSquareBracket(s);
         qslListOut.append(sOut);
     }
-    QString qsFileName = "./data/TextOut.txt";
-    //bool result = cLoadFiles::saveStringListToFile(qslListOut, qsFileName);
+    QString qsFileName = LoadFiles->qsProgramPath + "/data/TextOut.txt";
     bool result = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
 
     QString info = "execActionRemoveSquareBrackets(): save result ";

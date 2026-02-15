@@ -90,7 +90,7 @@ QString cLoadFiles::removeSquareBracket(QString s)
     QString Acc = "";
     if(ColonIndex > 0)
     {
-        Acc = s.mid(0,ColonIndex);//LeftBracketIndex);
+        Acc = s.mid(0,ColonIndex);
         Acc.append(" -");
         qDebug() << "Head=" << Acc;
         qsOut += Acc;

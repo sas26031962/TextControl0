@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStringList>
 #include <QDebug>
+#include <QFileInfo>
 
 #include "classes/cloadfiles.h"
 

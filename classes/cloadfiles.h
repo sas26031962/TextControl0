@@ -20,6 +20,7 @@ class cLoadFiles
 public:
 
     QStringList qslListIn;
+    QString qsProgramPath;
 
     //Конструкторы
     cLoadFiles(QTextBrowser * TextBrowser);
