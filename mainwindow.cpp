@@ -34,7 +34,19 @@ void MainWindow::execActionLoadFromFile(bool x)
 
 void MainWindow::execActionRemoveSquareBrackets(bool x)
 {
-    //QString sOut = LoadFiles->removeSquareBracket("One_Two_[Tree_Four]_Five");
-    QString sOut = LoadFiles->removeSquareBracket(qsLine0);
-    emit setStatus("execActionRemoveSquareBrackets(): " + sOut);
+    QStringList qslListOut;
+    qslListOut.clear();
+
+    foreach (auto s, LoadFiles->qslListIn)
+    {
+        QString sOut = LoadFiles->removeSquareBracket(s);
+        qslListOut.append(sOut);
+    }
+    QString qsFileName = "./data/TextOut.txt";
+    //bool result = cLoadFiles::saveStringListToFile(qslListOut, qsFileName);
+    bool result = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
+
+    QString info = "execActionRemoveSquareBrackets(): save result ";
+    if(result)info += "Ok"; else info += "Failure";
+    emit setStatus(info);
 }

@@ -21,13 +21,13 @@ void cLoadFiles::clearLines()
 //=============================================================================
 int cLoadFiles::loadStringsFromFile(const QString& fileName)
 {
-    qslList.clear();
-    qslList = cLoadFiles::loadStringListFromFile(fileName);
-    foreach (auto s, qslList)
+    qslListIn.clear();
+    qslListIn = cLoadFiles::loadStringListFromFile(fileName);
+    foreach (auto s, qslListIn)
     {
         TextBrowser->append(s);
     }
-    return qslList.count();
+    return qslListIn.count();
 }
 
 
