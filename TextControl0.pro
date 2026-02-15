@@ -17,20 +17,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    classes/cloadfiles.cpp \
-    classes/cenvironment.cpp \
-    classes/cimportfiles.cpp \
-    classes/cinifile.cpp \
-    classes/crecord.cpp \
-    classes/crecorditem.cpp
+    classes/cloadfiles.cpp
 
 HEADERS  += mainwindow.h \
-    classes/cloadfiles.h \
-    classes/cenvironment.h \
-    classes/cimportfiles.h \
-    classes/cinifile.h \
-    classes/crecord.h \
-    classes/crecorditem.h
+    classes/cloadfiles.h
 
 FORMS    += mainwindow.ui
 
