@@ -10,7 +10,6 @@
 #include <QTextBrowser>
 
 #include "classes/cimportfiles.h"
-#include "classes/cinifile.h"
 
 class cLoadFiles
 {

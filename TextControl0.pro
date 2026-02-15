@@ -33,3 +33,6 @@ HEADERS  += mainwindow.h \
     classes/crecorditem.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resource.qrc

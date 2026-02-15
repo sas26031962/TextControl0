@@ -7,6 +7,7 @@ INPUT(
 ./debug\cinifile.o
 ./debug\crecord.o
 ./debug\crecorditem.o
+./debug\qrc_resource.o
 ./debug\moc_mainwindow.o
 ./debug\moc_cimportfiles.o
 );
