@@ -35,6 +35,9 @@ private slots:
 void execSetStatus(QString s);
 void execActionLoadFromFile(bool x);
 void execActionRemoveSquareBrackets(bool x);
+void execActionEmbraceSquareBrackets(bool x);
+void execActionSearchPattern(bool x);
+void execActionSwapParts(bool x);
 
 signals:
 void setStatus(QString s);

@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pbSearchParameter->setCursor(Qt::PointingHandCursor);
     connect(pbSearchParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
         qDebug() << "PushButton 'Search' click";
-        //execSearch();
+        execActionSearchPattern(false);
     });
     ui->statusBar->addWidget(pbSearchParameter);
     //---
@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pbSearchParameter->setCursor(Qt::PointingHandCursor);
     connect(pbSwapParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
         qDebug() << "PushButton 'Swap' click";
-        //execSwap();
+        execActionSwapParts(false);
     });
     ui->statusBar->addWidget(pbSwapParameter);
     //---
@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pbEmbraceSquareBracketOfParameter->setCursor(Qt::PointingHandCursor);
     connect(pbEmbraceSquareBracketOfParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
         qDebug() << "PushButton 'Embrace' click";
-        //execEmbrace();
+        execActionEmbraceSquareBrackets(false);
     });
     ui->statusBar->addWidget(pbEmbraceSquareBracketOfParameter);
     //---
@@ -110,5 +110,23 @@ void MainWindow::execActionRemoveSquareBrackets(bool x)
 
     QString info = "execActionRemoveSquareBrackets(): save result ";
     if(result)info += "Ok"; else info += "Failure";
+    emit setStatus(info);
+}
+
+void MainWindow::execActionEmbraceSquareBrackets(bool x)
+{
+    QString info = "execActionEmbraceSquareBrackets";
+    emit setStatus(info);
+}
+
+void MainWindow::execActionSwapParts(bool x)
+{
+    QString info = "execActionSwapParts";
+    emit setStatus(info);
+}
+
+void MainWindow::execActionSearchPattern(bool x)
+{
+    QString info = "execActionSearchPattern";
     emit setStatus(info);
 }
