@@ -10,3 +10,5 @@ programm/data/Text.txt
 programm/debug/moc_mainwindow.cpp
 
 programm/debug/qrc_resource.cpp
+
+programm/data/Text_.txt

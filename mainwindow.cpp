@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QPushButton>
+#include <QStatusBar>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,7 +32,50 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qDebug() << "Path to programm directory:" << LoadFiles->qsProgramPath;
 
-}
+    //=========================================================================
+    //---Actions---
+    QPushButton * pbLoadFile = new QPushButton("Загрузка");
+    pbLoadFile->setCursor(Qt::PointingHandCursor);
+    connect(pbLoadFile, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Load' click";
+        execActionLoadFromFile(false);
+    });
+    ui->statusBar->addWidget(pbLoadFile);
+    //---
+    QPushButton * pbRemoveBracket = new QPushButton("Скобки удалить");
+    pbRemoveBracket->setCursor(Qt::PointingHandCursor);
+    connect(pbRemoveBracket, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Search' click";
+        execActionRemoveSquareBrackets(false);
+    });
+    ui->statusBar->addWidget(pbRemoveBracket);
+    //---
+    QPushButton * pbSearchParameter = new QPushButton("Поиск");
+    pbSearchParameter->setCursor(Qt::PointingHandCursor);
+    connect(pbSearchParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Search' click";
+        //execSearch();
+    });
+    ui->statusBar->addWidget(pbSearchParameter);
+    //---
+    QPushButton * pbSwapParameter = new QPushButton("Обмен");
+    pbSearchParameter->setCursor(Qt::PointingHandCursor);
+    connect(pbSwapParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Swap' click";
+        //execSwap();
+    });
+    ui->statusBar->addWidget(pbSwapParameter);
+    //---
+    QPushButton * pbEmbraceSquareBracketOfParameter = new QPushButton("Скобки добавить");
+    pbEmbraceSquareBracketOfParameter->setCursor(Qt::PointingHandCursor);
+    connect(pbEmbraceSquareBracketOfParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Embrace' click";
+        //execEmbrace();
+    });
+    ui->statusBar->addWidget(pbEmbraceSquareBracketOfParameter);
+    //---
+
+}//End of ctor
 
 MainWindow::~MainWindow()
 {
