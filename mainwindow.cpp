@@ -92,6 +92,10 @@ void MainWindow::execActionLoadFromFile(bool x)
 {
     QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
     int n = LoadFiles->loadStringsFromFile(qsFileName);
+
+    QString s = LoadFiles->getFirstLineFromDocument(ui->textBrowserData);
+    ui->LineEditSource->setText(s);
+
     emit setStatus("execActionLoadFiles() > load: " + QString::number(n) + " lines");
 }
 
@@ -129,12 +133,6 @@ void MainWindow::execActionSwapParts(bool x)
     emit setStatus(info);
 }
 
-void MainWindow::execActionSearchPattern(bool x)
-{
-    QString info = "execActionSearchPattern";
-    emit setStatus(info);
-}
-
 QString MainWindow::swapNameFamily(QString s)
 {
     QString s0 = s.simplified();
@@ -158,3 +156,77 @@ QString MainWindow::swapNameFamily(QString s)
         return qsResult;
     }
 }
+
+void MainWindow::execActionSearchPattern(bool x)
+{
+    QString info = "execActionSearchPattern:";
+    //---
+    QString qsSource = ui->LineEditSource->text();
+    QString qsParameter = ui->LineEditParameter->text();
+    QVector<int> * qvOutput = new QVector<int>();
+    qvOutput->clear();
+
+    int index = 0;//Индекс первого вхождения подстроки
+
+    QString qsTail = "";
+
+    while(index >= 0)
+    {
+        if(qvOutput->count() > 0)
+        {
+            //---
+            index = qsTail.indexOf(qsParameter);
+            //qDebug() << "X=" << index << " branch 1";
+
+            if(index >= 0)
+            {
+                qsTail = qsTail.mid(index + qsParameter.length());
+                qvOutput->append(index);
+
+                info += "X=";
+                info += QString::number(index);
+                info += " branch 1\n";
+            }
+            //---
+        }
+        else
+        {
+            //---
+            index = qsSource.indexOf(qsParameter);
+            //qDebug() << "X=" << index << " branch 0";
+
+            if(index >= 0)
+            {
+                qsTail = qsSource.mid(index + qsParameter.length());
+                qvOutput->append(index);
+
+                info += "X=";
+                info += QString::number(index);
+                info += " branch 0\n";
+            }
+            else
+            {
+                qsTail = qsSource;
+            }
+            //---
+        }
+
+        //Вывод информации после текущей итерации
+        if(x > 0)
+        {
+            //qDebug() << "Step:" << qvOutput->count() << " Tail=" << qsTail;
+            info += " Step:";
+            info += QString::number(qvOutput->count());
+            info += " Tail=";
+            info += qsTail;
+            info += "\n";
+        }
+    }
+    //Вывод информации после последней итерации
+    //qDebug() << "End of process, count:" << qvOutput->count();
+    info += "End of process, count:";
+    info += QString::number(qvOutput->count());
+    //---
+    emit setStatus(info);
+}
+

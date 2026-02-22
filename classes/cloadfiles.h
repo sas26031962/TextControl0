@@ -9,6 +9,7 @@
 #include <QRegularExpression>
 #include <QTextBrowser>
 #include <QDebug>
+#include <QTextBlock>
 
 #include "classes/cenvironment.h"
 
@@ -29,6 +30,7 @@ public:
     void clearLines();
     void appEndItem(QString s);
     QString removeSquareBracket(QString s);
+    QString getFirstLineFromDocument(QTextBrowser *textBrowser);
 
     static bool saveStringListToFile(const QString& fileName, const QStringList& list);
     static QStringList loadStringListFromFile(const QString& fileName);

@@ -37,7 +37,7 @@ public:
     QTextBrowser *textBrowserLog;
     QLabel *labelDataCaption;
     QLabel *labelLogCaption;
-    QLineEdit *lineEditData;
+    QLineEdit *LineEditSource;
     QLineEdit *LineEditParameter;
     QLabel *labelOptrationCaption;
     QLabel *labelParameterCaption;
@@ -76,9 +76,9 @@ public:
         labelLogCaption->setGeometry(QRect(750, 10, 281, 16));
         labelLogCaption->setStyleSheet(QStringLiteral("background-color: rgb(222, 235, 255);"));
         labelLogCaption->setAlignment(Qt::AlignCenter);
-        lineEditData = new QLineEdit(centralWidget);
-        lineEditData->setObjectName(QStringLiteral("lineEditData"));
-        lineEditData->setGeometry(QRect(10, 530, 731, 22));
+        LineEditSource = new QLineEdit(centralWidget);
+        LineEditSource->setObjectName(QStringLiteral("LineEditSource"));
+        LineEditSource->setGeometry(QRect(10, 530, 731, 22));
         LineEditParameter = new QLineEdit(centralWidget);
         LineEditParameter->setObjectName(QStringLiteral("LineEditParameter"));
         LineEditParameter->setGeometry(QRect(750, 530, 281, 22));

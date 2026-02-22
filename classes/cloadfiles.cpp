@@ -30,6 +30,16 @@ int cLoadFiles::loadStringsFromFile(const QString& fileName)
     return qslListIn.count();
 }
 
+QString cLoadFiles::getFirstLineFromDocument(QTextBrowser *textBrowser) {
+    QTextDocument *doc = textBrowser->document();
+    if (!doc) return QString();
+
+    QTextBlock firstBlock = doc->begin();
+    if (firstBlock.isValid()) {
+        return firstBlock.text();
+    }
+    return QString();
+}
 
 //=============================================================================
 

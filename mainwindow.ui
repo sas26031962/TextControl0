@@ -72,7 +72,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEditData">
+   <widget class="QLineEdit" name="LineEditSource">
     <property name="geometry">
      <rect>
       <x>10</x>
