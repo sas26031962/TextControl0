@@ -58,14 +58,6 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     ui->statusBar->addWidget(pbSearchParameter);
     //---
-    QPushButton * pbSwapParameter = new QPushButton("Обмен");
-    pbSearchParameter->setCursor(Qt::PointingHandCursor);
-    connect(pbSwapParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-        qDebug() << "PushButton 'Swap' click";
-        execActionSwapParts(false);
-    });
-    ui->statusBar->addWidget(pbSwapParameter);
-    //---
     QPushButton * pbEmbraceSquareBracketOfParameter = new QPushButton("Скобки добавить");
     pbEmbraceSquareBracketOfParameter->setCursor(Qt::PointingHandCursor);
     connect(pbEmbraceSquareBracketOfParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
@@ -73,6 +65,14 @@ MainWindow::MainWindow(QWidget *parent) :
         execActionEmbraceSquareBrackets(false);
     });
     ui->statusBar->addWidget(pbEmbraceSquareBracketOfParameter);
+    //---
+    QPushButton * pbSwapParameter = new QPushButton("Обмен");
+    pbSearchParameter->setCursor(Qt::PointingHandCursor);
+    connect(pbSwapParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Swap' click";
+        execActionSwapParts(false);
+    });
+    ui->statusBar->addWidget(pbSwapParameter);
     //---
 
 }//End of ctor
@@ -92,8 +92,13 @@ void MainWindow::execActionLoadFromFile(bool x)
 {
     QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
     int n = LoadFiles->loadStringsFromFile(qsFileName);
-
-    QString s = LoadFiles->getFirstLineFromDocument(ui->textBrowserData);
+    //Установка курсора на начало текста
+    int CursorPlace = 0;
+    QString s = LoadFiles->qslListIn.at(CursorPlace);
+    if (!safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
+    {
+        qDebug() << "Строка 10 не существует или произошла ошибка";
+    }
     ui->LineEditSource->setText(s);
 
     emit setStatus("execActionLoadFiles() > load: " + QString::number(n) + " lines");
@@ -103,12 +108,15 @@ void MainWindow::execActionRemoveSquareBrackets(bool x)
 {
     QStringList qslListOut;
     qslListOut.clear();
+    ui->textBrowserData->clear();
 
     foreach (auto s, LoadFiles->qslListIn)
     {
         QString sOut = LoadFiles->removeSquareBracket(s);
         qslListOut.append(sOut);
+        ui->textBrowserData->append(sOut);
     }
+    ui->LineEditSource->setText(qslListOut.at(0));
     QString qsFileName = LoadFiles->qsProgramPath + "/data/TextOut.txt";
     bool result = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
 
@@ -228,5 +236,32 @@ void MainWindow::execActionSearchPattern(bool x)
     info += QString::number(qvOutput->count());
     //---
     emit setStatus(info);
+}
+
+bool MainWindow::safeColorLine(QTextBrowser *textBrowser, int lineNumber, const QColor &color)
+{
+    if (!textBrowser || !textBrowser->document()) {
+        return false;
+    }
+
+    QTextDocument *doc = textBrowser->document();
+    if (lineNumber < 0 || lineNumber >= doc->blockCount()) {
+        return false; // Строка не существует
+    }
+
+    QTextCursor cursor(doc);
+    cursor.movePosition(QTextCursor::Start);
+
+    for (int i = 0; i < lineNumber; ++i) {
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+
+    cursor.select(QTextCursor::LineUnderCursor);
+
+    QTextCharFormat format;
+    format.setForeground(color);
+    cursor.mergeCharFormat(format);
+
+    return true;
 }
 

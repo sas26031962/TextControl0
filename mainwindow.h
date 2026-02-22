@@ -5,6 +5,10 @@
 #include <QStringList>
 #include <QDebug>
 #include <QFileInfo>
+#include <QTextDocument>
+#include <QTextBrowser>
+#include <QTextCursor>
+#include <QTextCharFormat>
 
 #include "classes/cloadfiles.h"
 
@@ -33,6 +37,8 @@ QString qsLine0 = "Винтеркей Серж, Шумилин Артем - Ре
 
 //Методы
 QString swapNameFamily(QString s);
+bool safeColorLine(QTextBrowser *textBrowser, int lineNumber, const QColor &color);
+
 
 private slots:
 void execSetStatus(QString s);
