@@ -31,6 +31,9 @@ private:
 cLoadFiles * LoadFiles;
 QString qsLine0 = "Винтеркей Серж, Шумилин Артем - Ревизор 21 - Ревизор: возвращение в СССР 21 [Сергей Уделов, 2024, Попаданцы, 64 kbps]";
 
+//Методы
+QString swapNameFamily(QString s);
+
 private slots:
 void execSetStatus(QString s);
 void execActionLoadFromFile(bool x);

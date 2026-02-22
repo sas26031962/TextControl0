@@ -15,6 +15,7 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -36,6 +37,10 @@ public:
     QTextBrowser *textBrowserLog;
     QLabel *labelDataCaption;
     QLabel *labelLogCaption;
+    QLineEdit *lineEditData;
+    QLineEdit *LineEditParameter;
+    QLabel *labelOptrationCaption;
+    QLabel *labelParameterCaption;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuScenary;
@@ -57,10 +62,10 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         textBrowserData = new QTextBrowser(centralWidget);
         textBrowserData->setObjectName(QStringLiteral("textBrowserData"));
-        textBrowserData->setGeometry(QRect(10, 40, 731, 501));
+        textBrowserData->setGeometry(QRect(10, 40, 721, 451));
         textBrowserLog = new QTextBrowser(centralWidget);
         textBrowserLog->setObjectName(QStringLiteral("textBrowserLog"));
-        textBrowserLog->setGeometry(QRect(750, 40, 281, 501));
+        textBrowserLog->setGeometry(QRect(750, 40, 281, 451));
         labelDataCaption = new QLabel(centralWidget);
         labelDataCaption->setObjectName(QStringLiteral("labelDataCaption"));
         labelDataCaption->setGeometry(QRect(14, 10, 721, 20));
@@ -71,6 +76,22 @@ public:
         labelLogCaption->setGeometry(QRect(750, 10, 281, 16));
         labelLogCaption->setStyleSheet(QStringLiteral("background-color: rgb(222, 235, 255);"));
         labelLogCaption->setAlignment(Qt::AlignCenter);
+        lineEditData = new QLineEdit(centralWidget);
+        lineEditData->setObjectName(QStringLiteral("lineEditData"));
+        lineEditData->setGeometry(QRect(10, 530, 731, 22));
+        LineEditParameter = new QLineEdit(centralWidget);
+        LineEditParameter->setObjectName(QStringLiteral("LineEditParameter"));
+        LineEditParameter->setGeometry(QRect(750, 530, 281, 22));
+        labelOptrationCaption = new QLabel(centralWidget);
+        labelOptrationCaption->setObjectName(QStringLiteral("labelOptrationCaption"));
+        labelOptrationCaption->setGeometry(QRect(10, 500, 721, 20));
+        labelOptrationCaption->setStyleSheet(QStringLiteral("background-color: rgb(222, 235, 255);"));
+        labelOptrationCaption->setAlignment(Qt::AlignCenter);
+        labelParameterCaption = new QLabel(centralWidget);
+        labelParameterCaption->setObjectName(QStringLiteral("labelParameterCaption"));
+        labelParameterCaption->setGeometry(QRect(750, 500, 281, 16));
+        labelParameterCaption->setStyleSheet(QStringLiteral("background-color: rgb(222, 235, 255);"));
+        labelParameterCaption->setAlignment(Qt::AlignCenter);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -106,6 +127,8 @@ public:
         actionRemoveSquareBrackets->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \320\272\320\262\320\260\320\264\321\200\320\260\321\202\320\275\321\213\320\265 \321\201\320\272\320\276\320\261\320\272\320\270", 0));
         labelDataCaption->setText(QApplication::translate("MainWindow", "\320\224\320\260\320\275\320\275\321\213\320\265", 0));
         labelLogCaption->setText(QApplication::translate("MainWindow", "\320\226\321\203\321\200\320\275\320\260\320\273", 0));
+        labelOptrationCaption->setText(QApplication::translate("MainWindow", "\320\241\321\202\321\200\320\276\320\272\320\260 \320\264\320\273\321\217 \321\200\320\260\320\261\320\276\321\202\321\213", 0));
+        labelParameterCaption->setText(QApplication::translate("MainWindow", "\320\237\320\260\321\200\320\260\320\274\320\265\321\202\321\200", 0));
         menuFile->setTitle(QApplication::translate("MainWindow", "\320\244\320\260\320\271\320\273", 0));
         menuScenary->setTitle(QApplication::translate("MainWindow", "\320\241\321\206\320\265\320\275\320\260\321\200\320\270\320\271", 0));
     } // retranslateUi

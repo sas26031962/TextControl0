@@ -121,7 +121,11 @@ void MainWindow::execActionEmbraceSquareBrackets(bool x)
 
 void MainWindow::execActionSwapParts(bool x)
 {
-    QString info = "execActionSwapParts";
+    QString info = "execActionSwapParts\n";
+    QString result = swapNameFamily(ui->LineEditParameter->text());
+    ui->LineEditParameter->setText(result);
+    //info += "Result=";
+    //info += result;
     emit setStatus(info);
 }
 
@@ -129,4 +133,28 @@ void MainWindow::execActionSearchPattern(bool x)
 {
     QString info = "execActionSearchPattern";
     emit setStatus(info);
+}
+
+QString MainWindow::swapNameFamily(QString s)
+{
+    QString s0 = s.simplified();
+    qDebug() << "Simplified: " << s0;
+
+    int x = s0.indexOf(' ');
+
+    if(x < 0)
+    {
+        //Возвращаем строку без изменений
+        return s;
+    }
+    else
+    {
+        QString qsHead = s.mid(0,x);
+        QString qsTail = s.mid(x + 1);
+        qDebug() << "Index of SPACE=" << x << " Head=" << qsHead << " Tail=" << qsTail;
+
+        //Возвращаем изменённую строку
+        QString qsResult = qsTail + " " + qsHead;
+        return qsResult;
+    }
 }
