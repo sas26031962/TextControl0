@@ -90,22 +90,32 @@ void MainWindow::execSetStatus(QString s)
 
 void MainWindow::execActionLoadFromFile(bool x)
 {
+    QString info = "execActionLoadFiles() > ";
     QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
     int n = LoadFiles->loadStringsFromFile(qsFileName);
     //Установка курсора на начало текста
     int CursorPlace = 0;
     QString s = LoadFiles->qslListIn.at(CursorPlace);
-    if (!safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
+    if (safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
     {
-        qDebug() << "Строка 10 не существует или произошла ошибка";
+        ui->LineEditSource->setText(s);
+        info += " load: ";
+        info += QString::number(n);
+        info += " lines";
     }
-    ui->LineEditSource->setText(s);
+    else
+    {
+        info += "String ";
+        info += QString::number(CursorPlace);
+        info += " not exist or error detected\n";
+    }
 
-    emit setStatus("execActionLoadFiles() > load: " + QString::number(n) + " lines");
+    emit setStatus(info);
 }
 
 void MainWindow::execActionRemoveSquareBrackets(bool x)
 {
+    QString info = "execActionRemoveSquareBrackets() > ";
     QStringList qslListOut;
     qslListOut.clear();
     ui->textBrowserData->clear();
@@ -116,11 +126,29 @@ void MainWindow::execActionRemoveSquareBrackets(bool x)
         qslListOut.append(sOut);
         ui->textBrowserData->append(sOut);
     }
-    ui->LineEditSource->setText(qslListOut.at(0));
+
+    //Установка курсора на начало текста
+    int CursorPlace = 0;
+    QString s = LoadFiles->qslListIn.at(CursorPlace);
+    if (safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
+    {
+        ui->LineEditSource->setText(s);
+        info += " processing: ";
+        info += QString::number(qslListOut.count());
+        info += " lines\n";
+    }
+    else
+    {
+        info += "String ";
+        info += QString::number(CursorPlace);
+        info += " not exist or error detected\n";
+    }
+
+    //Сохранение результата в файл
     QString qsFileName = LoadFiles->qsProgramPath + "/data/TextOut.txt";
     bool result = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
 
-    QString info = "execActionRemoveSquareBrackets(): save result ";
+    info += "Save result ";
     if(result)info += "Ok"; else info += "Failure";
     emit setStatus(info);
 }
