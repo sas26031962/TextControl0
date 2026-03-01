@@ -22,7 +22,8 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     classes/cloadfiles.h \
-    classes/cenvironment.h
+    classes/cenvironment.h \
+    classes/stvarmem.h
 
 FORMS    += mainwindow.ui
 
