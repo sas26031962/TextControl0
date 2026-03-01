@@ -24,6 +24,9 @@ class MainWindow : public QMainWindow
     bool IsWindows = false;
     QString qsCtorMessage;
 
+    int CurrentLitIndex = 0;
+    int ListCount = 0;
+
 public:
     //Конструкторы
     explicit MainWindow(QWidget *parent = 0);
@@ -51,6 +54,8 @@ void execActionRemoveSquareBrackets(bool x);
 void execActionEmbraceSquareBrackets(bool x);
 void execActionSearchPattern(bool x);
 void execActionSwapParts(bool x);
+void execActionSelectNextString(bool x);
+void execActionSelectPreviousString(bool x);
 
 signals:
 void setStatus(QString s);

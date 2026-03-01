@@ -100,6 +100,22 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     ui->statusBar->addWidget(pbSwapParameter);
     //---
+    QPushButton * pbNextString = new QPushButton("След.");
+    pbSearchParameter->setCursor(Qt::PointingHandCursor);
+    connect(pbNextString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Next' click";
+        execActionSelectNextString(false);
+    });
+    ui->statusBar->addWidget(pbNextString);
+    //---
+    QPushButton * pbPreviousString = new QPushButton("Пред.");
+    pbSearchParameter->setCursor(Qt::PointingHandCursor);
+    connect(pbPreviousString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Previous' click";
+        execActionSelectPreviousString(false);
+    });
+    ui->statusBar->addWidget(pbPreviousString);
+    //---
 
     emit setStatus(qsCtorMessage);
 
@@ -118,23 +134,68 @@ void MainWindow::execSetStatus(QString s)
 
 void MainWindow::execActionLoadFromFile(bool x)
 {
-    QString info = "execActionLoadFiles() > ";
-    QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
-    info += "FileName=";
-    info += qsFileName;
-
-    int n = LoadFiles->loadStringsFromFile(qsFileName);
-    if(n > 0)
+    if(!x)
     {
+        QString info = "execActionLoadFiles() > ";
+        QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
+        info += "FileName=";
+        info += qsFileName;
+
+        int n = LoadFiles->loadStringsFromFile(qsFileName);
+        if(n > 0)
+        {
+            CurrentLitIndex = 0;
+            ListCount = n;
+            //Установка курсора на начало текста
+            int CursorPlace = 0;
+            QString s = LoadFiles->qslListIn.at(CursorPlace);
+            if (safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
+            {
+                ui->LineEditSource->setText(s);
+                info += " load: ";
+                info += QString::number(n);
+                info += " lines";
+            }
+            else
+            {
+                info += "String ";
+                info += QString::number(CursorPlace);
+                info += " not exist or error detected\n";
+            }
+        }
+        else
+        {
+            info += " no strings loaded!!!";
+        }
+        emit setStatus(info);
+    }
+}
+
+void MainWindow::execActionRemoveSquareBrackets(bool x)
+{
+    if(!x)
+    {
+        QString info = "execActionRemoveSquareBrackets() > ";
+        QStringList qslListOut;
+        qslListOut.clear();
+        ui->textBrowserData->clear();
+
+        foreach (auto s, LoadFiles->qslListIn)
+        {
+            QString sOut = LoadFiles->removeSquareBracket(s);
+            qslListOut.append(sOut);
+            ui->textBrowserData->append(sOut);
+        }
+
         //Установка курсора на начало текста
         int CursorPlace = 0;
         QString s = LoadFiles->qslListIn.at(CursorPlace);
         if (safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
         {
             ui->LineEditSource->setText(s);
-            info += " load: ";
-            info += QString::number(n);
-            info += " lines";
+            info += " processing: ";
+            info += QString::number(qslListOut.count());
+            info += " lines\n";
         }
         else
         {
@@ -142,68 +203,37 @@ void MainWindow::execActionLoadFromFile(bool x)
             info += QString::number(CursorPlace);
             info += " not exist or error detected\n";
         }
-    }
-    else
-    {
-        info += " no strings loaded!!!";
-    }
-    emit setStatus(info);
-}
 
-void MainWindow::execActionRemoveSquareBrackets(bool x)
-{
-    QString info = "execActionRemoveSquareBrackets() > ";
-    QStringList qslListOut;
-    qslListOut.clear();
-    ui->textBrowserData->clear();
+        //Сохранение результата в файл
+        QString qsFileName = LoadFiles->qsProgramPath + "/data/TextOut.txt";
+        bool result = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
 
-    foreach (auto s, LoadFiles->qslListIn)
-    {
-        QString sOut = LoadFiles->removeSquareBracket(s);
-        qslListOut.append(sOut);
-        ui->textBrowserData->append(sOut);
+        info += "Save result ";
+        if(result)info += "Ok"; else info += "Failure";
+        emit setStatus(info);
     }
-
-    //Установка курсора на начало текста
-    int CursorPlace = 0;
-    QString s = LoadFiles->qslListIn.at(CursorPlace);
-    if (safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
-    {
-        ui->LineEditSource->setText(s);
-        info += " processing: ";
-        info += QString::number(qslListOut.count());
-        info += " lines\n";
-    }
-    else
-    {
-        info += "String ";
-        info += QString::number(CursorPlace);
-        info += " not exist or error detected\n";
-    }
-
-    //Сохранение результата в файл
-    QString qsFileName = LoadFiles->qsProgramPath + "/data/TextOut.txt";
-    bool result = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
-
-    info += "Save result ";
-    if(result)info += "Ok"; else info += "Failure";
-    emit setStatus(info);
 }
 
 void MainWindow::execActionEmbraceSquareBrackets(bool x)
 {
-    QString info = "execActionEmbraceSquareBrackets";
-    emit setStatus(info);
+    if(!x)
+    {
+        QString info = "execActionEmbraceSquareBrackets";
+        emit setStatus(info);
+    }
 }
 
 void MainWindow::execActionSwapParts(bool x)
 {
-    QString info = "execActionSwapParts\n";
-    QString result = swapNameFamily(ui->LineEditParameter->text());
-    ui->LineEditParameter->setText(result);
-    //info += "Result=";
-    //info += result;
-    emit setStatus(info);
+    if(!x)
+    {
+        QString info = "execActionSwapParts\n";
+        QString result = swapNameFamily(ui->LineEditParameter->text());
+        ui->LineEditParameter->setText(result);
+        //info += "Result=";
+        //info += result;
+        emit setStatus(info);
+    }
 }
 
 QString MainWindow::swapNameFamily(QString s)
@@ -330,3 +360,36 @@ bool MainWindow::safeColorLine(QTextBrowser *textBrowser, int lineNumber, const 
     return true;
 }
 
+void MainWindow::execActionSelectNextString(bool x)
+{
+    if(!x)
+    {
+        QString info = "MainWindow > Select next String";
+        if(ListCount > 0)
+        {
+
+        }
+        else
+        {
+            info += ": empty list, nothing to do";
+        }
+        emit setStatus(info);
+    }
+}
+
+void MainWindow::execActionSelectPreviousString(bool x)
+{
+    if(!x)
+    {
+        QString info = "MainWindow > Select previous String";
+        if(ListCount > 0)
+        {
+
+        }
+        else
+        {
+            info += ": empty list, nothing to do";
+        }
+        emit setStatus(info);
+    }
+}
