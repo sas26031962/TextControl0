@@ -27,8 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    qDebug() << "Канонический путь:" << fileInfo.canonicalFilePath();
 
     QString qsDirectory = fileInfo.path();
-    int iLastSlashPosition = qsDirectory.lastIndexOf('/');
-    LoadFiles->qsProgramPath = qsDirectory.mid(0, iLastSlashPosition);
+    LoadFiles->qsProgramPath = qsDirectory;
 
     qDebug() << "Path to programm directory:" << LoadFiles->qsProgramPath;
 
@@ -92,24 +91,33 @@ void MainWindow::execActionLoadFromFile(bool x)
 {
     QString info = "execActionLoadFiles() > ";
     QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
+    info += "FileName=";
+    info += qsFileName;
+
     int n = LoadFiles->loadStringsFromFile(qsFileName);
-    //Установка курсора на начало текста
-    int CursorPlace = 0;
-    QString s = LoadFiles->qslListIn.at(CursorPlace);
-    if (safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
+    if(n > 0)
     {
-        ui->LineEditSource->setText(s);
-        info += " load: ";
-        info += QString::number(n);
-        info += " lines";
+        //Установка курсора на начало текста
+        int CursorPlace = 0;
+        QString s = LoadFiles->qslListIn.at(CursorPlace);
+        if (safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
+        {
+            ui->LineEditSource->setText(s);
+            info += " load: ";
+            info += QString::number(n);
+            info += " lines";
+        }
+        else
+        {
+            info += "String ";
+            info += QString::number(CursorPlace);
+            info += " not exist or error detected\n";
+        }
     }
     else
     {
-        info += "String ";
-        info += QString::number(CursorPlace);
-        info += " not exist or error detected\n";
+        info += " no strings loaded!!!";
     }
-
     emit setStatus(info);
 }
 

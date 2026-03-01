@@ -12,3 +12,13 @@ programm/debug/moc_mainwindow.cpp
 programm/debug/qrc_resource.cpp
 
 programm/data/Text_.txt
+
+programm/.qmake.stash
+
+programm/moc_mainwindow.cpp
+
+programm/moc_predefs.h
+
+programm/qrc_resource.cpp
+
+programm/ui_mainwindow.h
