@@ -57,7 +57,8 @@ OBJECTS       = release/main.o \
 
 DIST          =  ..\mainwindow.h \
 		..\classes\cloadfiles.h \
-		..\classes\cenvironment.h ..\main.cpp \
+		..\classes\cenvironment.h \
+		..\classes\stvarmem.h ..\main.cpp \
 		..\mainwindow.cpp \
 		..\classes\cloadfiles.cpp \
 		..\classes\cenvironment.cpp

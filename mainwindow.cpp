@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    vmCurrentListIndex.install(0);
+
     LoadFiles = new cLoadFiles(ui->textBrowserData);
 
     connect(this, &MainWindow::setStatus, this, &MainWindow::execSetStatus);
@@ -144,24 +146,10 @@ void MainWindow::execActionLoadFromFile(bool x)
         int n = LoadFiles->loadStringsFromFile(qsFileName);
         if(n > 0)
         {
-            CurrentLitIndex = 0;
             ListCount = n;
             //Установка курсора на начало текста
-            int CursorPlace = 0;
-            QString s = LoadFiles->qslListIn.at(CursorPlace);
-            if (safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
-            {
-                ui->LineEditSource->setText(s);
-                info += " load: ";
-                info += QString::number(n);
-                info += " lines";
-            }
-            else
-            {
-                info += "String ";
-                info += QString::number(CursorPlace);
-                info += " not exist or error detected\n";
-            }
+            vmCurrentListIndex.install(0);
+            setCursorPlace();
         }
         else
         {
@@ -169,6 +157,16 @@ void MainWindow::execActionLoadFromFile(bool x)
         }
         emit setStatus(info);
     }
+}
+
+bool MainWindow::setCursorPlace()
+{
+    bool x;
+    QString s = LoadFiles->qslListIn.at(vmCurrentListIndex.Current);
+    ui->LineEditSource->setText(s);
+    x = safeColorLine(ui->textBrowserData, vmCurrentListIndex.Previous, Qt::black);
+    x = x & safeColorLine(ui->textBrowserData, vmCurrentListIndex.Current, Qt::blue);
+    return x;
 }
 
 void MainWindow::execActionRemoveSquareBrackets(bool x)
@@ -367,7 +365,11 @@ void MainWindow::execActionSelectNextString(bool x)
         QString info = "MainWindow > Select next String";
         if(ListCount > 0)
         {
-
+            int x = vmCurrentListIndex.Current;
+            x++;
+            if(x >= ListCount) x = ListCount - 1;
+            vmCurrentListIndex.push(x);
+            setCursorPlace();
         }
         else
         {
@@ -384,7 +386,11 @@ void MainWindow::execActionSelectPreviousString(bool x)
         QString info = "MainWindow > Select previous String";
         if(ListCount > 0)
         {
-
+            int x = vmCurrentListIndex.Current;
+            x--;
+            if(x < 0) x = 0;
+            vmCurrentListIndex.push(x);
+            setCursorPlace();
         }
         else
         {

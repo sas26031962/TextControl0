@@ -11,6 +11,7 @@
 #include <QTextCharFormat>
 
 #include "classes/cloadfiles.h"
+#include "classes/stvarmem.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,7 +25,7 @@ class MainWindow : public QMainWindow
     bool IsWindows = false;
     QString qsCtorMessage;
 
-    int CurrentLitIndex = 0;
+    varMem<int> vmCurrentListIndex;
     int ListCount = 0;
 
 public:
@@ -33,7 +34,7 @@ public:
     ~MainWindow();
 
     //Методы
-    //QString removeSquareBracket(QString s);
+    bool setCursorPlace();
 
 private:
     //Атрибуты
