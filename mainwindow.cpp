@@ -26,9 +26,36 @@ MainWindow::MainWindow(QWidget *parent) :
 //    qDebug() << "Абсолютный путь:" << fileInfo.absoluteFilePath();
 //    qDebug() << "Канонический путь:" << fileInfo.canonicalFilePath();
 
-    QString qsDirectory = fileInfo.path();
-    LoadFiles->qsProgramPath = qsDirectory;
+    // Определение конкретной ОС
+    #if defined(Q_OS_WIN)
+        qDebug() << "Running on Windows";
+        IsLinux = false;
+        IsWindows = true;
+    #elif defined(Q_OS_LINUX)
+        qDebug() << "Running on Linux";
+        IsLinux = true;
+        IsWindows = false;
+    #else
+        qDebug() << "Running on unknown OS";
+    #endif
 
+    QString qsDirectory = fileInfo.path();
+    if(IsLinux)
+    {
+        LoadFiles->qsProgramPath = qsDirectory;
+        qsCtorMessage = "Ctor > OS Linux detected";
+    }
+    else if(IsWindows)
+    {
+        int x = qsDirectory.lastIndexOf('/');
+        LoadFiles->qsProgramPath = qsDirectory.mid(0, x);
+        qsCtorMessage = "Ctor > OS Windows detected";
+    }
+    else
+    {
+        qsCtorMessage = "Ctor > Unknown OS detected";
+
+    }
     qDebug() << "Path to programm directory:" << LoadFiles->qsProgramPath;
 
     //=========================================================================
@@ -73,6 +100,8 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     ui->statusBar->addWidget(pbSwapParameter);
     //---
+
+    emit setStatus(qsCtorMessage);
 
 }//End of ctor
 

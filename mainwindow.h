@@ -20,6 +20,10 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    bool IsLinux = false;
+    bool IsWindows = false;
+    QString qsCtorMessage;
+
 public:
     //Конструкторы
     explicit MainWindow(QWidget *parent = 0);
