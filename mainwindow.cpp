@@ -186,24 +186,11 @@ void MainWindow::execActionRemoveSquareBrackets(bool x)
         }
 
         //Установка курсора на начало текста
-        int CursorPlace = 0;
-        QString s = LoadFiles->qslListIn.at(CursorPlace);
-        if (safeColorLine(ui->textBrowserData, CursorPlace, Qt::blue))
-        {
-            ui->LineEditSource->setText(s);
-            info += " processing: ";
-            info += QString::number(qslListOut.count());
-            info += " lines\n";
-        }
-        else
-        {
-            info += "String ";
-            info += QString::number(CursorPlace);
-            info += " not exist or error detected\n";
-        }
+        vmCurrentListIndex.install(0);
+        setCursorPlace();
 
         //Сохранение результата в файл
-        QString qsFileName = LoadFiles->qsProgramPath + "/data/TextOut.txt";
+        QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
         bool result = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
 
         info += "Save result ";
@@ -264,88 +251,99 @@ void MainWindow::execActionSearchPattern(bool x)
     //---
     QString qsSource = ui->LineEditSource->text();
     QString qsParameter = ui->LineEditParameter->text();
-    QVector<int> * qvOutput = new QVector<int>();
-    qvOutput->clear();
-
-    int index = 0;//Индекс первого вхождения подстроки
-
-    QString qsTail = "";
-
-    while(index >= 0)
+    if(qsParameter.count())
     {
-        if(qvOutput->count() > 0)
+        QVector<int> * qvOutput = new QVector<int>();
+        qvOutput->clear();
+
+        int index = 0;//Индекс первого вхождения подстроки
+
+        QString qsTail = "";
+
+        while(index >= 0)
         {
-            //---
-            index = qsTail.indexOf(qsParameter);
-            //qDebug() << "X=" << index << " branch 1";
-
-            if(index >= 0)
+            if(qvOutput->count() > 0)
             {
-                qsTail = qsTail.mid(index + qsParameter.length());
-                qvOutput->append(index);
+                //---
+                index = qsTail.indexOf(qsParameter);
+                //qDebug() << "X=" << index << " branch 1";
 
-                info += "X=";
-                info += QString::number(index);
-                info += " branch 1\n";
-            }
-            //---
-        }
-        else
-        {
-            //---
-            index = qsSource.indexOf(qsParameter);
-            //qDebug() << "X=" << index << " branch 0";
+                if(index >= 0)
+                {
+                    qsTail = qsTail.mid(index + qsParameter.length());
+                    qvOutput->append(index);
 
-            if(index >= 0)
-            {
-                qsTail = qsSource.mid(index + qsParameter.length());
-                qvOutput->append(index);
-
-                info += "X=";
-                info += QString::number(index);
-                info += " branch 0\n";
+                    info += "X=";
+                    info += QString::number(index);
+                    info += " branch 1\n";
+                }
+                //---
             }
             else
             {
-                qsTail = qsSource;
-            }
-            //---
-        }
+                //---
+                index = qsSource.indexOf(qsParameter);
+                //qDebug() << "X=" << index << " branch 0";
 
-        //Вывод информации после текущей итерации
-        if(x > 0)
-        {
-            //qDebug() << "Step:" << qvOutput->count() << " Tail=" << qsTail;
-            info += " Step:";
-            info += QString::number(qvOutput->count());
-            info += " Tail=";
-            info += qsTail;
-            info += "\n";
+                if(index >= 0)
+                {
+                    qsTail = qsSource.mid(index + qsParameter.length());
+                    qvOutput->append(index);
+
+                    info += "X=";
+                    info += QString::number(index);
+                    info += " branch 0\n";
+                }
+                else
+                {
+                    qsTail = qsSource;
+                }
+                //---
+            }
+
+            //Вывод информации после текущей итерации
+            if(x > 0)
+            {
+                //qDebug() << "Step:" << qvOutput->count() << " Tail=" << qsTail;
+                info += " Step:";
+                info += QString::number(qvOutput->count());
+                info += " Tail=";
+                info += qsTail;
+                info += "\n";
+            }
         }
+        //Вывод информации после последней итерации
+        //qDebug() << "End of process, count:" << qvOutput->count();
+        info += "End of process, count:";
+        info += QString::number(qvOutput->count());
+        //---
     }
-    //Вывод информации после последней итерации
-    //qDebug() << "End of process, count:" << qvOutput->count();
-    info += "End of process, count:";
-    info += QString::number(qvOutput->count());
-    //---
+    else
+    {
+        info += "Parameter is emptyy: nothing to do";
+    }
+
     emit setStatus(info);
 }
 
 bool MainWindow::safeColorLine(QTextBrowser *textBrowser, int lineNumber, const QColor &color)
 {
-    if (!textBrowser || !textBrowser->document()) {
+    if (!textBrowser || !textBrowser->document())
+    {
         return false;
     }
 
     QTextDocument *doc = textBrowser->document();
-    if (lineNumber < 0 || lineNumber >= doc->blockCount()) {
+    if (lineNumber < 0 || lineNumber >= doc->blockCount())
+    {
         return false; // Строка не существует
     }
 
     QTextCursor cursor(doc);
     cursor.movePosition(QTextCursor::Start);
 
-    for (int i = 0; i < lineNumber; ++i) {
+    for (int i = 0; i < lineNumber; ++i)
+    {
         cursor.movePosition(QTextCursor::NextBlock);
     }
 
