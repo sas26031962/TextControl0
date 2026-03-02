@@ -21,8 +21,6 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-//    bool IsLinux = false;
-//    bool IsWindows = false;
     QString qsCtorMessage;
 
     varMem<int> vmCurrentListIndex;
@@ -57,6 +55,7 @@ void execActionSearchPattern(bool x);
 void execActionSwapParts(bool x);
 void execActionSelectNextString(bool x);
 void execActionSelectPreviousString(bool x);
+void execActionStoreString(bool x);
 
 signals:
 void setStatus(QString s);

@@ -118,6 +118,14 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     ui->statusBar->addWidget(pbPreviousString);
     //---
+    QPushButton * pbStoreString = new QPushButton("Сохр.");
+    pbStoreString->setCursor(Qt::PointingHandCursor);
+    connect(pbStoreString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Store' click";
+        execActionStoreString(false);
+    });
+    ui->statusBar->addWidget(pbStoreString);
+    //---
 
     emit setStatus(qsCtorMessage);
 
@@ -394,6 +402,17 @@ void MainWindow::execActionSelectPreviousString(bool x)
         {
             info += ": empty list, nothing to do";
         }
+        emit setStatus(info);
+    }
+}
+
+void MainWindow::execActionStoreString(bool x)
+{
+    if(!x)
+    {
+        QString info = "MainWindow > Store String";
+        //---
+        //---
         emit setStatus(info);
     }
 }
