@@ -21,8 +21,8 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    bool IsLinux = false;
-    bool IsWindows = false;
+//    bool IsLinux = false;
+//    bool IsWindows = false;
     QString qsCtorMessage;
 
     varMem<int> vmCurrentListIndex;

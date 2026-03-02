@@ -31,23 +31,23 @@ MainWindow::MainWindow(QWidget *parent) :
     // Определение конкретной ОС
     #if defined(Q_OS_WIN)
         qDebug() << "Running on Windows";
-        IsLinux = false;
-        IsWindows = true;
+        cLoadFiles::IsLinux = false;
+        cLoadFiles::IsWindows = true;
     #elif defined(Q_OS_LINUX)
         qDebug() << "Running on Linux";
-        IsLinux = true;
-        IsWindows = false;
+        cLoadFiles::IsLinux = true;
+        cLoadFiles::IsWindows = false;
     #else
         qDebug() << "Running on unknown OS";
     #endif
 
     QString qsDirectory = fileInfo.path();
-    if(IsLinux)
+    if(cLoadFiles::IsLinux)
     {
         LoadFiles->qsProgramPath = qsDirectory;
         qsCtorMessage = "Ctor > OS Linux detected";
     }
-    else if(IsWindows)
+    else if(cLoadFiles::IsWindows)
     {
         int x = qsDirectory.lastIndexOf('/');
         LoadFiles->qsProgramPath = qsDirectory.mid(0, x);

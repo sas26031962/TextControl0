@@ -22,3 +22,5 @@ programm/moc_predefs.h
 programm/qrc_resource.cpp
 
 programm/ui_mainwindow.h
+
+programm/data/Screenshot1.txt

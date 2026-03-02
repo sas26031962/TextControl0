@@ -1,5 +1,9 @@
 #include "cloadfiles.h"
 
+bool cLoadFiles::IsLinux = false;
+bool cLoadFiles::IsWindows = false;
+
+
 cLoadFiles::cLoadFiles(QTextBrowser *text_browser)
 {
     TextBrowser = text_browser;
@@ -54,10 +58,21 @@ bool cLoadFiles::saveStringListToFile(const QString& fileName, const QStringList
     {
         // Установка кодировки
         QTextStream out(&file);
-        if(cEnvironment::iSystemType == WINDOWS_SYSTEM_TYPE)
+        if(cLoadFiles::IsWindows)
+        {
             out.setCodec("Windows-1251");
-        else
+            qDebug() << "Set Codec: Windows-1251";
+        }
+        else if(cLoadFiles::IsLinux)
+        {
             out.setCodec("UTF-8");
+            qDebug() << "Set Codec: UTF-8";
+        }
+        else
+        {
+            out.setCodec("UTF-8");
+            qDebug() << "Set Codec: UTF-8";
+        }
 
         for (const QString& str : list) {
             out << str << "\n";
@@ -77,7 +92,23 @@ QStringList cLoadFiles::loadStringListFromFile(const QString& fileName)
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&file);
-        in.setCodec("UTF-8");
+//        in.setCodec("UTF-8");
+        if(cLoadFiles::IsWindows)
+        {
+            in.setCodec("Windows-1251");
+            qDebug() << "Set Codec: Windows-1251";
+        }
+        else if(cLoadFiles::IsLinux)
+        {
+            in.setCodec("UTF-8");
+            qDebug() << "Set Codec: UTF-8";
+        }
+        else
+        {
+            in.setCodec("UTF-8");
+            qDebug() << "Set Codec: UTF-8";
+        }
+
 
         while (!in.atEnd()) {
             list << in.readLine();

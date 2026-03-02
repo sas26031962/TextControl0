@@ -19,6 +19,8 @@ class cLoadFiles
     QTextBrowser * TextBrowser;
 
 public:
+    static bool IsLinux;// = false;
+    static bool IsWindows;// = false;
 
     QStringList qslListIn;
     QString qsProgramPath;
