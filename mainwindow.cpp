@@ -412,31 +412,25 @@ void MainWindow::execActionStoreString(bool x)
     {
         QString info = "MainWindow > Store String";
         //---
-        QString s = ui->LineEditParameter->text();
+        QString s = ui->LineEditSource->text();
+        qDebug() << "New text for replace: " << s;
         LoadFiles->qslListIn.replace(vmCurrentListIndex.Current, s);
 
         //Замена строки в блоке на экране
-        QTextDocument *doc = ui->textBrowserData->document();
-        QTextBlock block = doc->findBlockByNumber(vmCurrentListIndex.Current);
-        if (block.isValid())
+        QStringList lines = ui->textBrowserData->toPlainText().split('\n');
+        if (vmCurrentListIndex.Current >= 0 && vmCurrentListIndex.Current < lines.size())
         {
-            QTextCursor cursor(block);
-            cursor.select(QTextCursor::BlockUnderCursor);   // выделяем весь блок
-            cursor.insertText(s);                           // заменяем текст
+            QString s = LoadFiles->qslListIn.at(vmCurrentListIndex.Current);//"New string";//ui->LineEditParameter->text();
+            lines[vmCurrentListIndex.Current] = s;
+            ui->textBrowserData->setPlainText(lines.join('\n'));
+            setCursorPlace();
         }
-        else
-        {
-            info += "Text block #";
-            info += QString::number(vmCurrentListIndex.Current);
-            info += " not found";
-        }
+        //Сохранение результата в файл
+        QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
+        bool result = cLoadFiles::saveStringListToFile(qsFileName, LoadFiles->qslListIn);
 
-//        //Сохранение результата в файл
-//        QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
-//        bool result = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
-
-//        info += "Save result ";
-//        if(result)info += "Ok"; else info += "Failure";
+        info += "Save result ";
+        if(result)info += "Ok"; else info += "Failure";
         //---
         emit setStatus(info);
     }
