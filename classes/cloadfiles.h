@@ -11,16 +11,16 @@
 #include <QDebug>
 #include <QTextBlock>
 
-#include "classes/cenvironment.h"
-
 class cLoadFiles
 {
     //Атрибуты
     QTextBrowser * TextBrowser;
 
 public:
-    static bool IsLinux;// = false;
-    static bool IsWindows;// = false;
+    static bool IsLinux;
+    static bool IsWindows;
+    static bool IsUTF8;
+    static bool IsWindows1251;
 
     QStringList qslListIn;
     QString qsProgramPath;
@@ -31,7 +31,6 @@ public:
     //Методы
     void clearLines();
     void appEndItem(QString s);
-    QString removeSquareBracket(QString s);
     QString getFirstLineFromDocument(QTextBrowser *textBrowser);
 
     static bool saveStringListToFile(const QString& fileName, const QStringList& list);

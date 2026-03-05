@@ -2,6 +2,8 @@
 
 bool cLoadFiles::IsLinux = false;
 bool cLoadFiles::IsWindows = false;
+bool cLoadFiles::IsUTF8 = false;
+bool cLoadFiles::IsWindows1251 = true;
 
 
 cLoadFiles::cLoadFiles(QTextBrowser *text_browser)
@@ -27,6 +29,9 @@ int cLoadFiles::loadStringsFromFile(const QString& fileName)
 {
     qslListIn.clear();
     qslListIn = cLoadFiles::loadStringListFromFile(fileName);
+
+    TextBrowser->clear();
+
     foreach (auto s, qslListIn)
     {
         TextBrowser->append(s);
@@ -58,12 +63,12 @@ bool cLoadFiles::saveStringListToFile(const QString& fileName, const QStringList
     {
         // Установка кодировки
         QTextStream out(&file);
-        if(cLoadFiles::IsWindows)
+        if(cLoadFiles::IsWindows1251)
         {
             out.setCodec("Windows-1251");
             qDebug() << "Set Codec: Windows-1251";
         }
-        else if(cLoadFiles::IsLinux)
+        else if(cLoadFiles::IsUTF8)
         {
             out.setCodec("UTF-8");
             qDebug() << "Set Codec: UTF-8";
@@ -92,13 +97,12 @@ QStringList cLoadFiles::loadStringListFromFile(const QString& fileName)
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&file);
-//        in.setCodec("UTF-8");
-        if(cLoadFiles::IsWindows)
+        if(cLoadFiles::IsWindows1251)
         {
             in.setCodec("Windows-1251");
             qDebug() << "Set Codec: Windows-1251";
         }
-        else if(cLoadFiles::IsLinux)
+        else if(cLoadFiles::IsUTF8)
         {
             in.setCodec("UTF-8");
             qDebug() << "Set Codec: UTF-8";
@@ -117,52 +121,6 @@ QStringList cLoadFiles::loadStringListFromFile(const QString& fileName)
         file.close();
     }
     return list;
-}
-
-//=============================================================================
-
-
-QString cLoadFiles::removeSquareBracket(QString s)
-{
-    QString qsOut = "";
-    int ColonIndex = s.indexOf(':');
-    int LeftBracketIndex = s.indexOf('[');
-    int RightBracketIndex = s.indexOf(']');
-    QString Acc = "";
-    if(ColonIndex > 0)
-    {
-        Acc = s.mid(0,ColonIndex);
-        Acc.append(" -");
-        qDebug() << "Head=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(ColonIndex + 1, (LeftBracketIndex - ColonIndex - 1));
-        qDebug() << "Neck=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(LeftBracketIndex + 1, (RightBracketIndex - LeftBracketIndex - 1));
-        qDebug() << "Middle=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(RightBracketIndex + 1);
-        qDebug() << "Taille=" << Acc;
-        qsOut += Acc;
-    }
-    else
-    {
-        Acc = s.mid(0,LeftBracketIndex);
-        qDebug() << "Head=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(LeftBracketIndex + 1, (RightBracketIndex - LeftBracketIndex - 1));
-        qDebug() << "Middle=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(RightBracketIndex + 1);
-        qDebug() << "Taille=" << Acc;
-        qsOut += Acc;
-    }
-    return qsOut;
 }
 
 //=============================================================================

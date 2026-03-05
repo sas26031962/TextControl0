@@ -26,6 +26,8 @@ class MainWindow : public QMainWindow
     varMem<int> vmCurrentListIndex;
     int ListCount = 0;
 
+    QString qsParametersFileName = "/data/Parameters.txt";
+    QStringList qslParameters;
 public:
     //Конструкторы
     explicit MainWindow(QWidget *parent = 0);
@@ -33,6 +35,7 @@ public:
 
     //Методы
     bool setCursorPlace();
+    QString removeSquareBracketAndColonToDefis(QString s);
 
 private:
     //Атрибуты
@@ -56,6 +59,7 @@ void execActionSwapParts(bool x);
 void execActionSelectNextString(bool x);
 void execActionSelectPreviousString(bool x);
 void execActionStoreString(bool x);
+void execActionAppendToList(bool x);
 
 signals:
 void setStatus(QString s);
