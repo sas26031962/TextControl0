@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, &MainWindow::setStatus, this, &MainWindow::execSetStatus);
     connect(ui->actionLoadFromFile, &QAction::triggered, this, &MainWindow::execActionLoadFromFile);
     connect(ui->actionRemoveSquareBrackets, &QAction::triggered, this, &MainWindow::execActionRemoveSquareBrackets);
+    connect(ui->actionSeparateStrings, &QAction::triggered, this, &MainWindow::execActionSeparateStrings);
 
     QString appPath = QCoreApplication::applicationFilePath();
     QFileInfo fileInfo(appPath);
@@ -524,6 +525,59 @@ void MainWindow::execActionAppendToList(bool x)
     }
 }
 
+
+void MainWindow::execActionSeparateStrings(bool x)
+{
+    if(!x)
+    {
+        QString info = "MainWindow > Separate strings:";
+        //---
+        QStringList qslListOut;
+        qslListOut.clear();
+        ui->textBrowserData->clear();
+        int Count = 0;
+
+        foreach (auto s, LoadFiles->qslListIn)
+        {
+            int x = s.indexOf("] ");
+            if(x > 0)
+            {
+                QString qsHead = s.mid(0, x);
+                QString qsTail = s.mid(x + 1);
+                qDebug() << "Head0=" << qsHead << " Tail0=" << qsTail;
+                qslListOut.append(qsHead);
+                ui->textBrowserData->append(qsHead);
+                while( x > 0)
+                {
+                    Count++;
+                    x = qsTail.indexOf("] ");
+                    qsHead = qsTail.mid(0, x);
+                    qslListOut.append(qsHead);
+                    ui->textBrowserData->append(qsHead);
+                    qDebug() << "Head1=" << qsHead;
+                    qsTail = qsTail.mid(x + 1);
+                }
+                qslListOut.append(qsTail);
+                ui->textBrowserData->append(qsTail);
+                qDebug() << "TailLast=" << qsTail;
+
+            }
+            else
+            {
+                qslListOut.append(s);
+                ui->textBrowserData->append(s);
+            }
+        }//End of foreach (auto s, LoadFiles->qslListIn)
+
+        info += " Count=";
+        info += QString::number(Count);
+
+        LoadFiles->qslListIn = qslListOut;
+        //---
+        emit setStatus(info);
+    }
+}
+
 //=============================================================================
 // МЕТОДЫ
 //=============================================================================
@@ -634,4 +688,3 @@ QString MainWindow::swapNameFamily(QString s)
         return qsResult;
     }
 }
-

@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
+      <y>50</y>
       <width>721</width>
-      <height>451</height>
+      <height>441</height>
      </rect>
     </property>
    </widget>
@@ -28,9 +28,9 @@
     <property name="geometry">
      <rect>
       <x>750</x>
-      <y>40</y>
+      <y>50</y>
       <width>281</width>
-      <height>391</height>
+      <height>381</height>
      </rect>
     </property>
    </widget>
@@ -40,7 +40,7 @@
       <x>214</x>
       <y>10</y>
       <width>521</width>
-      <height>20</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -59,7 +59,7 @@
       <x>750</x>
       <y>10</y>
       <width>281</width>
-      <height>16</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -136,7 +136,7 @@
       <x>10</x>
       <y>0</y>
       <width>191</width>
-      <height>31</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="title">
@@ -146,7 +146,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>10</y>
+       <y>15</y>
        <width>51</width>
        <height>17</height>
       </rect>
@@ -159,7 +159,7 @@
      <property name="geometry">
       <rect>
        <x>80</x>
-       <y>10</y>
+       <y>15</y>
        <width>101</width>
        <height>17</height>
       </rect>
@@ -253,6 +253,7 @@
      <string>Сценарий</string>
     </property>
     <addaction name="actionLoadFromFile"/>
+    <addaction name="actionSeparateStrings"/>
     <addaction name="actionRemoveSquareBrackets"/>
    </widget>
    <addaction name="menuFile"/>
@@ -280,6 +281,11 @@
   <action name="actionRemoveSquareBrackets">
    <property name="text">
     <string>Удалить квадратные скобки</string>
+   </property>
+  </action>
+  <action name="actionSeparateStrings">
+   <property name="text">
+    <string>Разделить строки</string>
    </property>
   </action>
  </widget>
