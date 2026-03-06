@@ -74,13 +74,14 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     ui->statusBar->addWidget(pbLoadFile);
     //---
-    QPushButton * pbRemoveBracket = new QPushButton("Скобки удалить");
-    pbRemoveBracket->setCursor(Qt::PointingHandCursor);
-    connect(pbRemoveBracket, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-        qDebug() << "PushButton 'Search' click";
-        execActionRemoveSquareBrackets(false);
-    });
-    ui->statusBar->addWidget(pbRemoveBracket);
+    //20260306 Вызов данной опции только через меню
+//    QPushButton * pbRemoveBracket = new QPushButton("Скобки удалить");
+//    pbRemoveBracket->setCursor(Qt::PointingHandCursor);
+//    connect(pbRemoveBracket, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+//        qDebug() << "PushButton 'Search' click";
+//        execActionRemoveSquareBrackets(false);
+//    });
+//    ui->statusBar->addWidget(pbRemoveBracket);
     //---
     QPushButton * pbSearchParameter = new QPushButton("Поиск");
     pbSearchParameter->setCursor(Qt::PointingHandCursor);
@@ -573,6 +574,17 @@ void MainWindow::execActionSeparateStrings(bool x)
         info += QString::number(Count);
 
         LoadFiles->qslListIn = qslListOut;
+
+        //Запись в файл
+        QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
+        bool x = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
+        info += ", strings count=";
+        info += QString::number(qslListOut.count());
+        if(x)
+        {
+            info += " stored to file:";
+            info += qsParametersFileName;
+        }
         //---
         emit setStatus(info);
     }
