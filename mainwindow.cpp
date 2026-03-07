@@ -167,6 +167,14 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
+    connect(ui->actionLoadParameters, &QAction::triggered, this, [this](bool checked) {
+        qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
+        ui->comboBoxParameter->clear();
+        ui->comboBoxParameter->addItems(qslParameters);
+
+        qDebug() << "execActionLoadParameters";
+    });
+
     qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
     ui->comboBoxParameter->clear();
     ui->comboBoxParameter->addItems(qslParameters);

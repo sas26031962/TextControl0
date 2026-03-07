@@ -253,6 +253,7 @@
      <string>Сценарий</string>
     </property>
     <addaction name="actionLoadFromFile"/>
+    <addaction name="actionLoadParameters"/>
     <addaction name="actionSeparateStrings"/>
     <addaction name="actionRemoveSquareBrackets"/>
    </widget>
@@ -286,6 +287,11 @@
   <action name="actionSeparateStrings">
    <property name="text">
     <string>Разделить строки</string>
+   </property>
+  </action>
+  <action name="actionLoadParameters">
+   <property name="text">
+    <string>Загрузить параметры</string>
    </property>
   </action>
  </widget>
