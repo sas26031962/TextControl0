@@ -66,6 +66,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //=========================================================================
     //---Actions---
+    //
+    connect(ui->comboBoxParameter, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),this, [=](int value){
+        QString s = ui->comboBoxParameter->itemText(value);
+        qDebug() << "ComboBoxParameterIndexChanged:" << value << " Text=" << s;
+        ui->LineEditParameter->setText(s);
+    });
+    //---
     QPushButton * pbLoadFile = new QPushButton("Загрузка");
     pbLoadFile->setCursor(Qt::PointingHandCursor);
     connect(pbLoadFile, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
