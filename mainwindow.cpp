@@ -609,6 +609,27 @@ void MainWindow::execActionSeparateStrings(bool x)
 // МЕТОДЫ
 //=============================================================================
 
+void  MainWindow::closeEvent(QCloseEvent * event)
+{
+    QMessageBox::StandardButton resBtn = QMessageBox::question(
+        this, "Подтверждение",
+        tr("Вы уверены, что хотите выйти?\n"),
+        QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+        QMessageBox::Yes
+        );
+    if(resBtn != QMessageBox::Yes)
+    {
+        event->ignore();
+    }
+    else
+    {
+        event->accept();
+        //---
+        // Действия по закрытию приложения
+        //---
+    }
+}
+
 QString MainWindow::removeSquareBracketAndColonToDefis(QString s)
 {
     QString qsOut = "";

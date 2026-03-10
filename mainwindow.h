@@ -9,6 +9,8 @@
 #include <QTextBrowser>
 #include <QTextCursor>
 #include <QTextCharFormat>
+#include <QSettings>
+#include <QMessageBox>
 
 #include "classes/cloadfiles.h"
 #include "classes/stvarmem.h"
@@ -37,6 +39,8 @@ public:
     bool setCursorPlace();
     QString removeSquareBracketAndColonToDefis(QString s);
 
+protected:
+    void closeEvent(QCloseEvent * event);
 private:
     //Атрибуты
     Ui::MainWindow *ui;
