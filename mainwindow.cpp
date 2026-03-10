@@ -175,6 +175,24 @@ MainWindow::MainWindow(QWidget *parent) :
         qDebug() << "execActionLoadParameters";
     });
 
+    //--- Загрузка данных из файла конфигурации
+    QSettings settings(qsIniFilePath, QSettings::IniFormat);
+    settings.beginGroup("Initial");
+
+    bool w1251 = settings.value("Widows1251",true).toBool();
+    bool utf8 = settings.value("UTF8",true).toBool();
+    int index = settings.value("Index",65535).toInt();
+
+    qDebug() << "From Ini file: w1251=" << w1251 << " utf8=" << utf8 << " index=" << index;
+
+    LoadFiles->IsWindows1251 = w1251;
+    LoadFiles->IsUTF8 = utf8;
+    vmCurrentListIndex.install(index);
+
+    settings.endGroup();
+    settings.sync();
+
+    //Загрузка параметров из файла
     qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
     ui->comboBoxParameter->clear();
     ui->comboBoxParameter->addItems(qslParameters);
@@ -626,6 +644,15 @@ void  MainWindow::closeEvent(QCloseEvent * event)
         event->accept();
         //---
         // Действия по закрытию приложения
+        QSettings settings(qsIniFilePath, QSettings::IniFormat);
+
+        settings.beginGroup("Initial");
+        settings.setValue("Widows1251", LoadFiles->IsWindows1251);
+        settings.setValue("UTF8", LoadFiles->IsUTF8);
+        settings.setValue("Index", vmCurrentListIndex.Current);
+        settings.endGroup();
+        settings.sync();
+
         //---
     }
 }
