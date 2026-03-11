@@ -328,18 +328,18 @@ void MainWindow::execSetStatus(QString s)
 //=============================================================================
 void MainWindow::execActionProcessString(bool x)
 {
-    qDebug() << "execActionProcessString:" << x;
-
     if(!x)
     {
         //Поиск параметра в строке
         QString qsSource = LoadFiles->qslListIn.at(vmCurrentListIndex.Current);
+        //QString qsSource = ui->LineEditSource->text();
+        qDebug() << "Source:" << qsSource;
         QVector<int> * qvOutput = new QVector<int>();
-        QString info = "";
+        QString info = "execActionProcessString:\n";
         //---
         foreach (auto qsParameter, qslParameters)
         {
-            //QString qsParameter = qslParameters.at(0);
+            qDebug() << "->Parameter:" << qsParameter;
             qvOutput->clear();
 
             int index = 0;//Индекс первого вхождения подстроки
@@ -395,8 +395,11 @@ void MainWindow::execActionProcessString(bool x)
                     info += "\n";
                 }
             }//End of while(index >= 0)
+
         }
         //---
+
+        emit setStatus(info);
     }
 }//End of void MainWindow::execActionProcessString(bool x)
 
