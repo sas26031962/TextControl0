@@ -168,11 +168,14 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     connect(ui->actionLoadParameters, &QAction::triggered, this, [this](bool checked) {
-        qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
-        ui->comboBoxParameter->clear();
-        ui->comboBoxParameter->addItems(qslParameters);
+        if (checked)
+        {
+            qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
+            ui->comboBoxParameter->clear();
+            ui->comboBoxParameter->addItems(qslParameters);
 
-        qDebug() << "execActionLoadParameters";
+            qDebug() << "execActionLoadParameters";
+        }
     });
 
     //--- Загрузка данных из файла конфигурации
@@ -197,28 +200,102 @@ MainWindow::MainWindow(QWidget *parent) :
     execActionLoadFromFile(false);
     //Установка курсора
     vmCurrentListIndex.push(index);
-    QString info = "MainWindow ctor > Load ";
-    info += QString::number(ListCount);
-    info += " lines:";
+    QString info = ".";
     if(ListCount > 0)
     {
         setCursorPlace();
-        info += " current index=";
+        info += " Current index=";
         info += QString::number(vmCurrentListIndex.Current);
+        info += ".\n";
     }
     else
     {
-        info += " empty list, nothing to do";
+        info += " Empty list, nothing to do";
     }
-    emit setStatus(info);
 
     //Загрузка параметров из файла
     qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
     ui->comboBoxParameter->clear();
     ui->comboBoxParameter->addItems(qslParameters);
 
+    //Поиск параметра в строке
+    QString qsSource = LoadFiles->qslListIn.at(index);
+    QVector<int> * qvOutput = new QVector<int>();
+    //---
+    foreach (auto qsParameter, qslParameters)
+    {
+        //QString qsParameter = qslParameters.at(0);
+        qvOutput->clear();
+
+        int index = 0;//Индекс первого вхождения подстроки
+
+        QString qsTail = "";
+
+        while(index >= 0)
+        {
+            if(qvOutput->count() > 0)
+            {
+                //---
+                index = qsTail.indexOf(qsParameter);
+                //qDebug() << "X=" << index << " branch 1";
+
+                if(index >= 0)
+                {
+                    qsTail = qsTail.mid(index + qsParameter.length());
+                    qvOutput->append(index);
+
+                    info += "X=";
+                    info += QString::number(index);
+                    info += " branch 1\n";
+                }
+                //---
+            }
+            else
+            {
+                //---
+                index = qsSource.indexOf(qsParameter);
+                //qDebug() << "X=" << index << " branch 0";
+
+                if(index >= 0)
+                {
+                    qsTail = qsSource.mid(index + qsParameter.length());
+                    qvOutput->append(index);
+
+                    info += "X=";
+                    info += QString::number(index);
+                    info += " branch 0\n";
+                }
+                else
+                {
+                    qsTail = qsSource;
+                    //info += " First iteration break";
+
+                    break;
+                }
+                //---
+            }
+
+            //Вывод информации после текущей итерации
+            if(index >= 0)
+            {
+                //info += " Step:";
+                //info += QString::number(qvOutput->count());
+                info += "Parameter=";
+                info += qsParameter;
+                //info += " Tail=";
+                //info += qsTail;
+                info += "\n";
+            }
+        }//End of while(index >= 0)
+
+        //Вывод информации после последней итерации
+        //info += ". End of process, count:";
+        //info += QString::number(qvOutput->count());
+    }
+    //---
+
     //Финальное сообщение конструктора
-    emit setStatus(qsCtorMessage);
+    emit setStatus(qsCtorMessage + info);
 
 }//End of ctor
 
@@ -457,10 +534,10 @@ void MainWindow::execActionSearchPattern(bool x)
         info += "End of process, count:";
         info += QString::number(qvOutput->count());
         //---
-    }
+    }//End of if(qsParameter.count())
     else
     {
-        info += "Parameter is emptyy: nothing to do";
+        info += "Parameter is empty: nothing to do";
     }
 
     emit setStatus(info);
