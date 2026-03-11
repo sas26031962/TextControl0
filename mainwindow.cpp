@@ -187,10 +187,30 @@ MainWindow::MainWindow(QWidget *parent) :
 
     LoadFiles->IsWindows1251 = w1251;
     LoadFiles->IsUTF8 = utf8;
-    vmCurrentListIndex.install(index);
 
     settings.endGroup();
     settings.sync();
+
+    //Использование загруженных данных
+    ui->radioButtonWindows1251->setChecked(w1251);
+    ui->radioButtonUTF8->setChecked(utf8);
+    execActionLoadFromFile(false);
+    //Установка курсора
+    vmCurrentListIndex.push(index);
+    QString info = "MainWindow ctor > Load ";
+    info += QString::number(ListCount);
+    info += " lines:";
+    if(ListCount > 0)
+    {
+        setCursorPlace();
+        info += " current index=";
+        info += QString::number(vmCurrentListIndex.Current);
+    }
+    else
+    {
+        info += " empty list, nothing to do";
+    }
+    emit setStatus(info);
 
     //Загрузка параметров из файла
     qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
