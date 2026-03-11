@@ -66,6 +66,7 @@ void execActionSelectPreviousString(bool x);
 void execActionStoreString(bool x);
 void execActionAppendToList(bool x);
 void execActionSeparateStrings(bool x);
+void execActionProcessString(bool x);
 
 signals:
 void setStatus(QString s);

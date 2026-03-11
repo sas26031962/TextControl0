@@ -148,6 +148,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addWidget(pbInsertToList);
     //---
 
+    QPushButton * pbProcessString = new QPushButton("Обработка строки");
+    pbProcessString->setCursor(Qt::PointingHandCursor);
+    connect(pbProcessString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'ProcessString' click";
+        execActionProcessString(false);
+    });
+    ui->statusBar->addWidget(pbProcessString);
+    //---
+
     //---Выбор кодировки---
     connect(ui->radioButtonUTF8, &QRadioButton::toggled, this, [this](bool checked) {
         if (checked)
@@ -317,6 +326,79 @@ void MainWindow::execSetStatus(QString s)
 //=============================================================================
 // АКЦИИ
 //=============================================================================
+void MainWindow::execActionProcessString(bool x)
+{
+    qDebug() << "execActionProcessString:" << x;
+
+    if(!x)
+    {
+        //Поиск параметра в строке
+        QString qsSource = LoadFiles->qslListIn.at(vmCurrentListIndex.Current);
+        QVector<int> * qvOutput = new QVector<int>();
+        QString info = "";
+        //---
+        foreach (auto qsParameter, qslParameters)
+        {
+            //QString qsParameter = qslParameters.at(0);
+            qvOutput->clear();
+
+            int index = 0;//Индекс первого вхождения подстроки
+
+            QString qsTail = "";
+
+            while(index >= 0)
+            {
+                if(qvOutput->count() > 0)
+                {
+                    //---
+                    index = qsTail.indexOf(qsParameter);
+
+                    if(index >= 0)
+                    {
+                        qsTail = qsTail.mid(index + qsParameter.length());
+                        qvOutput->append(index);
+
+                        info += "X=";
+                        info += QString::number(index);
+                        info += " branch 1\n";
+                    }
+                    //---
+                }
+                else
+                {
+                    //---
+                    index = qsSource.indexOf(qsParameter);
+
+                    if(index >= 0)
+                    {
+                        qsTail = qsSource.mid(index + qsParameter.length());
+                        qvOutput->append(index);
+
+                        info += "X=";
+                        info += QString::number(index);
+                        info += " branch 0\n";
+                    }
+                    else
+                    {
+                        qsTail = qsSource;
+
+                        break;
+                    }
+                    //---
+                }
+
+                //Вывод информации после текущей итерации
+                if(index >= 0)
+                {
+                    info += "Parameter=";
+                    info += qsParameter;
+                    info += "\n";
+                }
+            }//End of while(index >= 0)
+        }
+        //---
+    }
+}//End of void MainWindow::execActionProcessString(bool x)
 
 void MainWindow::execActionLoadFromFile(bool x)
 {
