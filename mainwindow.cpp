@@ -226,7 +226,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
     ui->comboBoxParameter->clear();
     ui->comboBoxParameter->addItems(qslParameters);
-
+/*
     //Поиск параметра в строке
     QString qsSource = LoadFiles->qslListIn.at(index);
     QVector<int> * qvOutput = new QVector<int>();
@@ -302,7 +302,7 @@ MainWindow::MainWindow(QWidget *parent) :
         //info += QString::number(qvOutput->count());
     }
     //---
-
+*/
     //Финальное сообщение конструктора
     emit setStatus(qsCtorMessage + info);
 
@@ -339,7 +339,7 @@ void MainWindow::execActionProcessString(bool x)
         //---
         foreach (auto qsParameter, qslParameters)
         {
-            qDebug() << "->Parameter:" << qsParameter;
+            //qDebug() << "->Parameter:" << qsParameter;
             qvOutput->clear();
 
             int index = 0;//Индекс первого вхождения подстроки
@@ -355,7 +355,15 @@ void MainWindow::execActionProcessString(bool x)
 
                     if(index >= 0)
                     {
-                        qsTail = qsTail.mid(index + qsParameter.length());
+                        //---20260312
+                        qsTail.insert(index, '[');
+                        qsTail.insert(index + 1, '[');
+                        qsTail.insert(index + qsParameter.length() + 2, ']');
+                        qsTail.insert(index + qsParameter.length() + 3, ']');
+                        qDebug() << "Branch1: Tail=" << qsTail;
+                        //---
+                        //qsTail = qsTail.mid(index + qsParameter.length());//old
+                        qsTail = qsTail.mid(index + qsParameter.length() + 4);//new
                         qvOutput->append(index);
 
                         info += "X=";
@@ -371,7 +379,15 @@ void MainWindow::execActionProcessString(bool x)
 
                     if(index >= 0)
                     {
-                        qsTail = qsSource.mid(index + qsParameter.length());
+                        //---20260312
+                        qsSource.insert(index, '[');
+                        qsSource.insert(index + 1, '[');
+                        qsSource.insert(index + qsParameter.length() + 2, ']');
+                        qsSource.insert(index + qsParameter.length() + 3, ']');
+                        ui->LineEditSource->setText(qsSource);
+                        //---
+                        //qsTail = qsSource.mid(index + qsParameter.length());//old
+                        qsTail = qsSource.mid(index + qsParameter.length() + 4);//new
                         qvOutput->append(index);
 
                         info += "X=";
