@@ -63,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "Path to programm directory:" << LoadFiles->qsProgramPath;
 
     qsParametersFileName = LoadFiles->qsProgramPath + qsParametersFileName;
+    qsIniFilePath = LoadFiles->qsProgramPath + qsIniFilePath;//20260313-1
 
     //=========================================================================
     //---Actions---

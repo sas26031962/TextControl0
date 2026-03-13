@@ -29,7 +29,7 @@ class MainWindow : public QMainWindow
     int ListCount = 0;
 
     QString qsParametersFileName = "/data/Parameters.txt";
-    QString qsIniFilePath = "./settings.ini";
+    QString qsIniFilePath = "/settings.ini";
     QStringList qslParameters;
 public:
     //Конструкторы
