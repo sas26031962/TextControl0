@@ -80,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent) :
         execActionLoadFromFile(false);
     });
     ui->statusBar->addWidget(pbLoadFile);
+
     //---
     //20260306 Вызов данной опции только через меню
 //    QPushButton * pbRemoveBracket = new QPushButton("Скобки удалить");
@@ -97,6 +98,7 @@ MainWindow::MainWindow(QWidget *parent) :
         execActionSearchPattern(false);
     });
     ui->statusBar->addWidget(pbSearchParameter);
+
     //---
     QPushButton * pbEmbraceSquareBracketOfParameter = new QPushButton("Скобки добавить");
     pbEmbraceSquareBracketOfParameter->setCursor(Qt::PointingHandCursor);
@@ -106,6 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     ui->statusBar->addWidget(pbEmbraceSquareBracketOfParameter);
     //---
+
     QPushButton * pbSwapParameter = new QPushButton("Обмен");
     pbSearchParameter->setCursor(Qt::PointingHandCursor);
     connect(pbSwapParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
@@ -114,6 +117,16 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     ui->statusBar->addWidget(pbSwapParameter);
     //---
+
+    QPushButton * pbInsertToList = new QPushButton("Доб.в список");
+    pbInsertToList->setCursor(Qt::PointingHandCursor);
+    connect(pbInsertToList, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Append to list' click";
+        execActionAppendToList(false);
+    });
+    ui->statusBar->addWidget(pbInsertToList);
+    //---
+
     QPushButton * pbNextString = new QPushButton("След.");
     pbSearchParameter->setCursor(Qt::PointingHandCursor);
     connect(pbNextString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
@@ -139,13 +152,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addWidget(pbStoreString);
     //---
 
-    QPushButton * pbInsertToList = new QPushButton("Доб.в список");
-    pbInsertToList->setCursor(Qt::PointingHandCursor);
-    connect(pbInsertToList, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-        qDebug() << "PushButton 'Append to list' click";
-        execActionAppendToList(false);
+    QPushButton * pbRevert = new QPushButton("Отм.измен.");
+    pbRevert->setCursor(Qt::PointingHandCursor);
+    connect(pbRevert, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Revert' click";
+        execActionRevert(false);
     });
-    ui->statusBar->addWidget(pbInsertToList);
+    ui->statusBar->addWidget(pbRevert);
     //---
 
     QPushButton * pbProcessString = new QPushButton("Обработка строки");
@@ -226,83 +239,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
     ui->comboBoxParameter->clear();
     ui->comboBoxParameter->addItems(qslParameters);
-/*
-    //Поиск параметра в строке
-    QString qsSource = LoadFiles->qslListIn.at(index);
-    QVector<int> * qvOutput = new QVector<int>();
-    //---
-    foreach (auto qsParameter, qslParameters)
-    {
-        //QString qsParameter = qslParameters.at(0);
-        qvOutput->clear();
 
-        int index = 0;//Индекс первого вхождения подстроки
-
-        QString qsTail = "";
-
-        while(index >= 0)
-        {
-            if(qvOutput->count() > 0)
-            {
-                //---
-                index = qsTail.indexOf(qsParameter);
-                //qDebug() << "X=" << index << " branch 1";
-
-                if(index >= 0)
-                {
-                    qsTail = qsTail.mid(index + qsParameter.length());
-                    qvOutput->append(index);
-
-                    info += "X=";
-                    info += QString::number(index);
-                    info += " branch 1\n";
-                }
-                //---
-            }
-            else
-            {
-                //---
-                index = qsSource.indexOf(qsParameter);
-                //qDebug() << "X=" << index << " branch 0";
-
-                if(index >= 0)
-                {
-                    qsTail = qsSource.mid(index + qsParameter.length());
-                    qvOutput->append(index);
-
-                    info += "X=";
-                    info += QString::number(index);
-                    info += " branch 0\n";
-                }
-                else
-                {
-                    qsTail = qsSource;
-                    //info += " First iteration break";
-
-                    break;
-                }
-                //---
-            }
-
-            //Вывод информации после текущей итерации
-            if(index >= 0)
-            {
-                //info += " Step:";
-                //info += QString::number(qvOutput->count());
-                info += "Parameter=";
-                info += qsParameter;
-                //info += " Tail=";
-                //info += qsTail;
-                info += "\n";
-            }
-        }//End of while(index >= 0)
-
-        //Вывод информации после последней итерации
-        //info += ". End of process, count:";
-        //info += QString::number(qvOutput->count());
-    }
-    //---
-*/
     //Финальное сообщение конструктора
     emit setStatus(qsCtorMessage + info);
 
@@ -684,6 +621,19 @@ void MainWindow::execActionSelectPreviousString(bool x)
         {
             info += ": empty list, nothing to do";
         }
+        emit setStatus(info);
+    }
+}
+
+void MainWindow::execActionRevert(bool x)
+{
+    if(!x)
+    {
+        QString info = "MainWindow > Revert ";
+        //---
+        setCursorPlace();
+        info += QString::number(vmCurrentListIndex.Current);
+        //---
         emit setStatus(info);
     }
 }
