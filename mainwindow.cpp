@@ -633,6 +633,11 @@ void MainWindow::execActionRevert(bool x)
         QString info = "MainWindow > Revert ";
         //---
         setCursorPlace();
+        QString s = ui->LineEditSource->text();
+        s.remove('[');
+        s.remove(']');
+        ui->LineEditSource->setText(s);
+        LoadFiles->qslListIn.replace(vmCurrentListIndex.Current, s);
         info += QString::number(vmCurrentListIndex.Current);
         //---
         emit setStatus(info);
