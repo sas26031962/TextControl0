@@ -11,6 +11,8 @@
 #include <QTextCharFormat>
 #include <QSettings>
 #include <QMessageBox>
+#include <QApplication>
+#include <QClipboard>
 
 #include "classes/cloadfiles.h"
 #include "classes/stvarmem.h"
@@ -69,7 +71,7 @@ void execActionSeparateStrings(bool x);
 void execActionProcessString(bool x);
 void execActionRevert(bool x);
 void execActionAppendToParameterList();
-
+void execActionCtrlV();
 
 signals:
 void setStatus(QString s);

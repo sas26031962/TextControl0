@@ -139,6 +139,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addWidget(pbRevert);
     //---
 
+    QPushButton * pbCtrlV = new QPushButton("Ctrl+V");
+    pbCtrlV->setCursor(Qt::PointingHandCursor);
+    connect(pbCtrlV, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'CtrlV' click";
+        execActionCtrlV();
+    });
+    ui->statusBar->addWidget(pbCtrlV);
+    //---
+
     QPushButton * pbProcessString = new QPushButton("Задать разметку");
     pbProcessString->setCursor(Qt::PointingHandCursor);
     connect(pbProcessString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
@@ -362,6 +371,15 @@ void MainWindow::execActionProcessString(bool x)
         emit setStatus(info);
     }
 }//End of void MainWindow::execActionProcessString(bool x)
+
+void MainWindow::execActionCtrlV()
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    QString textFromClipboard = clipboard->text();
+    ui->LineEditParameter->setText(textFromClipboard);
+
+}
+
 
 void MainWindow::execActionLoadFromFile(bool x)
 {
