@@ -74,13 +74,14 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->LineEditParameter->setText(s);
     });
     //---
-    QPushButton * pbLoadFile = new QPushButton("Загрузка");
-    pbLoadFile->setCursor(Qt::PointingHandCursor);
-    connect(pbLoadFile, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-        qDebug() << "PushButton 'Load' click";
-        execActionLoadFromFile(false);
-    });
-    ui->statusBar->addWidget(pbLoadFile);
+    //20260315 Вызов данной опции только через меню
+//    QPushButton * pbLoadFile = new QPushButton("Загрузка");
+//    pbLoadFile->setCursor(Qt::PointingHandCursor);
+//    connect(pbLoadFile, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+//        qDebug() << "PushButton 'Load' click";
+//        execActionLoadFromFile(false);
+//    });
+//    ui->statusBar->addWidget(pbLoadFile);
 
     //---
     //20260306 Вызов данной опции только через меню
@@ -110,13 +111,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addWidget(pbEmbraceSquareBracketOfParameter);
     //---
 
-    QPushButton * pbSwapParameter = new QPushButton("Обмен");
-    pbSearchParameter->setCursor(Qt::PointingHandCursor);
-    connect(pbSwapParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-        qDebug() << "PushButton 'Swap' click";
-        execActionSwapParts(false);
-    });
-    ui->statusBar->addWidget(pbSwapParameter);
+    //20260315 Данная опция не используется
+//    QPushButton * pbSwapParameter = new QPushButton("Обмен");
+//    pbSearchParameter->setCursor(Qt::PointingHandCursor);
+//    connect(pbSwapParameter, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+//        qDebug() << "PushButton 'Swap' click";
+//        execActionSwapParts(false);
+//    });
+//    ui->statusBar->addWidget(pbSwapParameter);
     //---
 
     QPushButton * pbPreviousString = new QPushButton("Пред.");
@@ -128,7 +130,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addWidget(pbPreviousString);
     //---
 
-    QPushButton * pbRevert = new QPushButton("Отм.измен.");
+    QPushButton * pbRevert = new QPushButton("Удал.разметку");
     pbRevert->setCursor(Qt::PointingHandCursor);
     connect(pbRevert, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
         qDebug() << "PushButton 'Revert' click";
@@ -137,7 +139,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addWidget(pbRevert);
     //---
 
-    QPushButton * pbProcessString = new QPushButton("Обработка строки");
+    QPushButton * pbProcessString = new QPushButton("Задать разметку");
     pbProcessString->setCursor(Qt::PointingHandCursor);
     connect(pbProcessString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
         qDebug() << "PushButton 'ProcessString' click";
