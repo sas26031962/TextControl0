@@ -119,23 +119,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addWidget(pbSwapParameter);
     //---
 
-    QPushButton * pbInsertToList = new QPushButton("Доб.в список");
-    pbInsertToList->setCursor(Qt::PointingHandCursor);
-    connect(pbInsertToList, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-        qDebug() << "PushButton 'Append to list' click";
-        execActionAppendToList(false);
-    });
-    ui->statusBar->addWidget(pbInsertToList);
-    //---
-
-    QPushButton * pbNextString = new QPushButton("След.");
-    pbSearchParameter->setCursor(Qt::PointingHandCursor);
-    connect(pbNextString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-        qDebug() << "PushButton 'Next' click";
-        execActionSelectNextString(false);
-    });
-    ui->statusBar->addWidget(pbNextString);
-    //---
     QPushButton * pbPreviousString = new QPushButton("Пред.");
     pbSearchParameter->setCursor(Qt::PointingHandCursor);
     connect(pbPreviousString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
@@ -143,14 +126,6 @@ MainWindow::MainWindow(QWidget *parent) :
         execActionSelectPreviousString(false);
     });
     ui->statusBar->addWidget(pbPreviousString);
-    //---
-    QPushButton * pbStoreString = new QPushButton("Сохр.");
-    pbStoreString->setCursor(Qt::PointingHandCursor);
-    connect(pbStoreString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-        qDebug() << "PushButton 'Store' click";
-        execActionStoreString(false);
-    });
-    ui->statusBar->addWidget(pbStoreString);
     //---
 
     QPushButton * pbRevert = new QPushButton("Отм.измен.");
@@ -169,6 +144,35 @@ MainWindow::MainWindow(QWidget *parent) :
         execActionProcessString(false);
     });
     ui->statusBar->addWidget(pbProcessString);
+    //---
+
+    QPushButton * pbStoreString = new QPushButton("Сохр.");
+    pbStoreString->setCursor(Qt::PointingHandCursor);
+    connect(pbStoreString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Store' click";
+        execActionStoreString(false);
+    });
+    ui->statusBar->addWidget(pbStoreString);
+    //---
+
+    QPushButton * pbNextString = new QPushButton("След.");
+    pbSearchParameter->setCursor(Qt::PointingHandCursor);
+    connect(pbNextString, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+        qDebug() << "PushButton 'Next' click";
+        execActionSelectNextString(false);
+    });
+    ui->statusBar->addWidget(pbNextString);
+    //---
+
+    connect(ui->pushButtonAppend, &QPushButton::pressed, this, &MainWindow::execActionAppendToParameterList);
+
+//    QPushButton * pbInsertToList = new QPushButton("Доб.в список");
+//    pbInsertToList->setCursor(Qt::PointingHandCursor);
+//    connect(pbInsertToList, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
+//        qDebug() << "PushButton 'Append to list' click";
+//        execActionAppendToList(false);
+//    });
+//    ui->statusBar->addWidget(pbInsertToList);
     //---
 
     //---Выбор кодировки---
@@ -678,39 +682,44 @@ void MainWindow::execActionAppendToList(bool x)
 {
     if(!x)
     {
-        QString info = "MainWindow > Append to list:";
-        //---
-        QString s = ui->LineEditParameter->text();
-        if(s.length() > 0)
+        execActionAppendToParameterList();
+    }
+}
+
+void MainWindow::execActionAppendToParameterList()
+{
+    QString info = "MainWindow > Append to Parameter list:";
+    //---
+    QString s = ui->LineEditParameter->text();
+    if(s.length() > 0)
+    {
+        if(qslParameters.contains(s))
         {
-            if(qslParameters.contains(s))
-            {
-                info += s;
-                info += " exist in this list, nothing to do!";
-            }
-            else
-            {
-                qslParameters.append(s);
-                bool x = cLoadFiles::saveStringListToFile(qsParametersFileName, qslParameters);
-                ui->comboBoxParameter->addItem(s);
-                info += s;
-                info += ", strings count=";
-                info += QString::number(ui->comboBoxParameter->count());
-                if(x)
-                {
-                    info += " stored to file:";
-                    info += qsParametersFileName;
-                }
-            }
+            info += s;
+            info += " exist in this list, nothing to do!";
         }
         else
         {
-            info += " empty string, nothing to do";
+            qslParameters.append(s);
+            bool x = cLoadFiles::saveStringListToFile(qsParametersFileName, qslParameters);
+            ui->comboBoxParameter->addItem(s);
+            info += s;
+            info += ", strings count=";
+            info += QString::number(ui->comboBoxParameter->count());
+            if(x)
+            {
+                info += " stored to file:";
+                info += qsParametersFileName;
+            }
         }
-
-        //---
-        emit setStatus(info);
     }
+    else
+    {
+        info += " empty string, nothing to do";
+    }
+
+    //---
+    emit setStatus(info);
 }
 
 

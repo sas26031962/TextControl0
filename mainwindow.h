@@ -68,6 +68,7 @@ void execActionAppendToList(bool x);
 void execActionSeparateStrings(bool x);
 void execActionProcessString(bool x);
 void execActionRevert(bool x);
+void execActionAppendToParameterList();
 
 
 signals:
