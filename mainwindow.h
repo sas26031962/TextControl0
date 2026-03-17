@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QClipboard>
+#include <QTextLayout>
+#include <QLineEdit>
 
 #include "classes/cloadfiles.h"
 #include "classes/stvarmem.h"
@@ -54,6 +56,7 @@ QString qsLine0 = "Винтеркей Серж, Шумилин Артем - Ре
 //Методы
 QString swapNameFamily(QString s);
 bool safeColorLine(QTextBrowser *textBrowser, int lineNumber, const QColor &color);
+void setLineEditTextFormat(QLineEdit *lineEdit, const QList<QTextLayout::FormatRange> &formats);
 
 
 private slots:

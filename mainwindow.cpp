@@ -913,11 +913,50 @@ bool MainWindow::safeColorLine(QTextBrowser *textBrowser, int lineNumber, const 
     return true;
 }
 
+void MainWindow::setLineEditTextFormat(QLineEdit *lineEdit, const QList<QTextLayout::FormatRange> &formats)
+{
+    if(!lineEdit) return;
+
+    QList<QInputMethodEvent::Attribute>attributes;
+    foreach (const QTextLayout::FormatRange &fr, formats) {
+        QInputMethodEvent::AttributeType type = QInputMethodEvent::TextFormat;
+        int start = fr.start - lineEdit->cursorPosition();
+        int length = fr.length;
+        QVariant value = fr.format;
+        attributes.append(QInputMethodEvent::Attribute(type, start, length, value));
+    }
+    QInputMethodEvent event(QString(), attributes);
+    QCoreApplication::sendEvent(lineEdit, &event);
+}
+
 bool MainWindow::setCursorPlace()
 {
     bool x;
     QString s = LoadFiles->qslListIn.at(vmCurrentListIndex.Current);
     ui->LineEditSource->setText(s);
+    //---
+    QList<QTextLayout::FormatRange> formats;
+    QTextCharFormat f;
+    f.setFontWeight(QFont::Bold);
+    f.setForeground(Qt::blue);
+    QTextLayout::FormatRange format_hello;
+    format_hello.start = 0;
+    format_hello.length = 5;
+    format_hello.format = f;
+
+    f.setFontItalic(true);
+    f.setBackground(Qt::darkYellow);
+    f.setForeground(Qt::white);
+    QTextLayout::FormatRange format_wonder;
+    format_wonder.start = 6;
+    format_wonder.length = 10;
+    format_wonder.format = f;
+
+    formats.append(format_hello);
+    formats.append(format_wonder);
+
+    setLineEditTextFormat(ui->LineEditSource, formats);
+    //---
     x = safeColorLine(ui->textBrowserData, vmCurrentListIndex.Previous, Qt::black);
     x = x & safeColorLine(ui->textBrowserData, vmCurrentListIndex.Current, Qt::blue);
     return x;
