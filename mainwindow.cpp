@@ -235,6 +235,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //Использование загруженных данных
     ui->radioButtonWindows1251->setChecked(w1251);
     ui->radioButtonUTF8->setChecked(utf8);
+
+    //Загрузка параметров из файла
+    qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
+    ui->comboBoxParameter->clear();
+    ui->comboBoxParameter->addItems(qslParameters);
+    //Загрузка данных для обработки
     execActionLoadFromFile(false);
     //Установка курсора
     vmCurrentListIndex.push(index);
@@ -250,11 +256,6 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         info += " Empty list, nothing to do";
     }
-
-    //Загрузка параметров из файла
-    qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
-    ui->comboBoxParameter->clear();
-    ui->comboBoxParameter->addItems(qslParameters);
 
     //Финальное сообщение конструктора
     emit setStatus(qsCtorMessage + info);
@@ -934,26 +935,36 @@ bool MainWindow::setCursorPlace()
     bool x;
     QString s = LoadFiles->qslListIn.at(vmCurrentListIndex.Current);
     ui->LineEditSource->setText(s);
-    //---
+
+    struct sPlace{
+        int x = -1;
+        int len = 0;
+    }PlaceInstance;
+
     QList<QTextLayout::FormatRange> formats;
     QTextCharFormat f;
-    f.setFontWeight(QFont::Bold);
-    f.setForeground(Qt::blue);
-    QTextLayout::FormatRange format_hello;
-    format_hello.start = 0;
-    format_hello.length = 5;
-    format_hello.format = f;
 
-    f.setFontItalic(true);
-    f.setBackground(Qt::darkYellow);
-    f.setForeground(Qt::white);
-    QTextLayout::FormatRange format_wonder;
-    format_wonder.start = 6;
-    format_wonder.length = 10;
-    format_wonder.format = f;
+    foreach (auto str, qslParameters)
+    {
+        PlaceInstance.x = s.indexOf(str);
+        if(PlaceInstance.x > 0 )
+        {
+            qDebug() << "Parameter=" << str << ": x=" << PlaceInstance.x << " len=" << PlaceInstance.len;
+            PlaceInstance.len = str.length();
 
-    formats.append(format_hello);
-    formats.append(format_wonder);
+            f.setFontWeight(QFont::Bold);
+            f.setForeground(Qt::blue);
+            QTextLayout::FormatRange format_Selected;
+            format_Selected.start = PlaceInstance.x;
+            format_Selected.length = PlaceInstance.len;
+            format_Selected.format = f;
+
+            formats.append(format_Selected);
+        }
+
+    }
+
+    //---
 
     setLineEditTextFormat(ui->LineEditSource, formats);
     //---
