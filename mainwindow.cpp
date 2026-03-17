@@ -367,6 +367,9 @@ void MainWindow::execActionProcessString(bool x)
             }//End of while(index >= 0)
 
         }
+
+        //setCursorPlace();//!!!
+
         //---
 
         emit setStatus(info);
