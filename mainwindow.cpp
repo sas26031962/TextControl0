@@ -950,7 +950,7 @@ bool MainWindow::setCursorPlace()
     foreach (auto str, qslParameters)
     {
         PlaceInstance.x = s.indexOf(str);
-        if(PlaceInstance.x > 0 )
+        if(PlaceInstance.x >= 0 )//!!! 20260320
         {
             qDebug() << "Parameter=" << str << ": x=" << PlaceInstance.x << " len=" << PlaceInstance.len;
             PlaceInstance.len = str.length();
