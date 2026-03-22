@@ -35,6 +35,8 @@ class MainWindow : public QMainWindow
     QString qsParametersFileName = "/data/Parameters.txt";
     QString qsIniFilePath = "/settings.ini";
     QStringList qslParameters;
+    QStringList qslCategories;
+
 public:
     //Конструкторы
     explicit MainWindow(QWidget *parent = 0);

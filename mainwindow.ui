@@ -30,7 +30,7 @@
       <x>750</x>
       <y>60</y>
       <width>281</width>
-      <height>371</height>
+      <height>301</height>
      </rect>
     </property>
    </widget>
@@ -233,6 +233,35 @@
      <string>+=</string>
     </property>
    </widget>
+   <widget class="QLabel" name="labelCategoryListCaption">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>370</y>
+      <width>281</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(222, 235, 255);</string>
+    </property>
+    <property name="text">
+     <string>Категории</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBoxCategories">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>400</y>
+      <width>281</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>labelResult</zorder>
    <zorder>textBrowserData</zorder>
    <zorder>textBrowserLog</zorder>
@@ -246,6 +275,8 @@
    <zorder>labelListCaption</zorder>
    <zorder>comboBoxParameter</zorder>
    <zorder>pushButtonAppend</zorder>
+   <zorder>labelCategoryListCaption</zorder>
+   <zorder>comboBoxCategories</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

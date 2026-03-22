@@ -232,6 +232,16 @@ MainWindow::MainWindow(QWidget *parent) :
     settings.endGroup();
     settings.sync();
 
+    qslCategories.clear();
+    qslCategories.append("Без категории");
+    qslCategories.append("Автор");
+    qslCategories.append("Цикл произведений");
+    qslCategories.append("Произведение");
+    qslCategories.append("Чтец");
+
+    ui->comboBoxCategories->addItems(qslCategories);
+    ui->comboBoxCategories->setCurrentIndex(0);
+
     //Использование загруженных данных
     ui->radioButtonWindows1251->setChecked(w1251);
     ui->radioButtonUTF8->setChecked(utf8);
