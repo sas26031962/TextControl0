@@ -267,6 +267,19 @@ MainWindow::MainWindow(QWidget *parent) :
         info += " Empty list, nothing to do";
     }
 
+    //20260327
+    connect(ui->textBrowserData, &QTextBrowser::selectionChanged, this, [this](){
+        QTextCursor cursor = ui->textBrowserData->textCursor();
+        int blockNumber = cursor.block().blockNumber();
+        //qDebug() << "TextBrowserData: selectionChanged:" << blockNumber;
+        vmCurrentListIndex.push(blockNumber);
+        setCursorPlace();
+        emit setStatus("MainWindow: set cursor by click:" + QString::number(blockNumber));
+    });
+
+    ui->labelDataCaption->installEventFilter(this);
+    ui->labelListCaption->installEventFilter(this);
+
     //Финальное сообщение конструктора
     emit setStatus(qsCtorMessage + info);
 
@@ -1009,3 +1022,73 @@ QString MainWindow::swapNameFamily(QString s)
         return qsResult;
     }
 }
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    switch (event->type())
+    {
+        case QEvent::MouseButtonPress:
+        {
+            QMouseEvent * mouseEvent = static_cast<QMouseEvent *>(event);
+
+            //qDebug() << "Mouse button press";
+
+//            QPoint p = QCursor::pos();
+//            QRect geo = geometry();
+//            QPoint p0 = QPoint(p.x() - geo.x(), p.y() - geo.y());
+//            qDebug() << "Mouse event cursor point: x=" << QString::number(p0.x()) << " y=" << QString::number(p0.y());
+
+            if(mouseEvent->button() == Qt::LeftButton)
+            {
+                //qDebug() << "Mouse left: press()";
+
+                if(obj->objectName() == "labelDataCaption")
+                {
+                    qDebug() << "labelDataCaption mouse press()";
+                    return true;
+                }
+
+                if(obj->objectName() == "textBrowserData")
+                {
+                    qDebug() << "textBrowserData mouse press()";
+                    return true;
+                }
+            }
+       }
+       break;
+       //----
+       case QEvent::MouseButtonRelease:
+       {
+            QMouseEvent * mouseEvent = static_cast<QMouseEvent *>(event);
+
+            //qDebug() << "Mouse left: release";
+
+            if(mouseEvent->button() == Qt::LeftButton)
+            {
+
+                if(obj->objectName() == "labelDataCaption")
+                {
+                    qDebug() << "labelDataCaption mouse release()";
+                    return true;
+                }
+
+                if(obj->objectName() == "textBrowserData")
+                {
+                    qDebug() << "textBrowserData mouse release()";
+                    return true;
+                }
+
+            }
+        }
+        break;
+
+        default:
+           //qDebug() << "Any event";
+        break;
+
+    }//End of switch (event->type())
+
+    // Передаём событие дальше для стандартной обработки
+    return QMainWindow::eventFilter(obj, event);
+}
+

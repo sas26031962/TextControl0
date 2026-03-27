@@ -48,6 +48,8 @@ public:
 
 protected:
     void closeEvent(QCloseEvent * event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
 private:
     //Атрибуты
     Ui::MainWindow *ui;
