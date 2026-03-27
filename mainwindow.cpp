@@ -274,7 +274,7 @@ MainWindow::MainWindow(QWidget *parent) :
         //qDebug() << "TextBrowserData: selectionChanged:" << blockNumber;
         vmCurrentListIndex.push(blockNumber);
         setCursorPlace();
-        emit setStatus("MainWindow: set cursor by click:" + QString::number(blockNumber));
+        emit setStatus("MainWindow: set cursor by click: current=" + QString::number(vmCurrentListIndex.Current) + " Previous=" + QString::number(vmCurrentListIndex.Previous));
     });
 
     ui->labelDataCaption->installEventFilter(this);
