@@ -694,7 +694,9 @@ void MainWindow::execActionRevert(bool x)
         emit setStatus(info);
     }
 }
-
+//
+// Действие: запоминание строки из lineEdit в массив строк, файл и в TextBrowser
+//
 void MainWindow::execActionStoreString(bool x)
 {
     if(!x)
@@ -703,23 +705,25 @@ void MainWindow::execActionStoreString(bool x)
         //---
         QString s = ui->LineEditSource->text();
         qDebug() << "New text for replace: " << s;
+
+        //Замена строки в массиве, загруженном из файла
         LoadFiles->qslListIn.replace(vmCurrentListIndex.Current, s);
 
-        //Замена строки в блоке на экране
-        QStringList lines = ui->textBrowserData->toPlainText().split('\n');
-        if (vmCurrentListIndex.Current >= 0 && vmCurrentListIndex.Current < lines.size())
-        {
-            QString s = LoadFiles->qslListIn.at(vmCurrentListIndex.Current);//"New string";//ui->LineEditParameter->text();
-            lines[vmCurrentListIndex.Current] = s;
-            ui->textBrowserData->setPlainText(lines.join('\n'));
-            setCursorPlace();
-        }
         //Сохранение результата в файл
         QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
         bool result = cLoadFiles::saveStringListToFile(qsFileName, LoadFiles->qslListIn);
 
         info += "Save result ";
         if(result)info += "Ok"; else info += "Failure";
+
+        //Замена строки в блоке на экране
+        ui->textBrowserData->clear();
+
+        foreach (auto s, LoadFiles->qslListIn)
+        {
+            ui->textBrowserData->append(s);
+        }
+        setCursorPlace();
         //---
         emit setStatus(info);
     }
