@@ -1048,9 +1048,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                     return true;
                 }
 
-                if(obj->objectName() == "textBrowserData")
+                if(obj->objectName() == "labelListCaption")
                 {
-                    qDebug() << "textBrowserData mouse press()";
+                    qDebug() << "labelListCaption mouse press()";
                     return true;
                 }
             }
@@ -1072,9 +1072,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                     return true;
                 }
 
-                if(obj->objectName() == "textBrowserData")
+                if(obj->objectName() == "labelListCaption")
                 {
-                    qDebug() << "textBrowserData mouse release()";
+                    qDebug() << "labelListCaption mouse release()";
                     return true;
                 }
 
