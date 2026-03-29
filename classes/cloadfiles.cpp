@@ -6,48 +6,25 @@ bool cLoadFiles::IsUTF8 = false;
 bool cLoadFiles::IsWindows1251 = true;
 
 
-cLoadFiles::cLoadFiles(QTextBrowser *text_browser)
+cLoadFiles::cLoadFiles(QTextBrowser * text_browser)
 {
-    TextBrowser = text_browser;
+    TextBrowserLF = text_browser;
 }
 
 //=============================================================================
 
-void cLoadFiles::appEndItem(QString s)
-{
-    TextBrowser->append(s);
-}
-
-//=============================================================================
-void cLoadFiles::clearLines()
-{
-    TextBrowser->clear();
-}
-
-//=============================================================================
 int cLoadFiles::loadStringsFromFile(const QString& fileName)
 {
     qslListIn.clear();
     qslListIn = cLoadFiles::loadStringListFromFile(fileName);
 
-    TextBrowser->clear();
+    TextBrowserLF->clear();
 
     foreach (auto s, qslListIn)
     {
-        TextBrowser->append(s);
+        TextBrowserLF->append(s);
     }
     return qslListIn.count();
-}
-
-QString cLoadFiles::getFirstLineFromDocument(QTextBrowser *textBrowser) {
-    QTextDocument *doc = textBrowser->document();
-    if (!doc) return QString();
-
-    QTextBlock firstBlock = doc->begin();
-    if (firstBlock.isValid()) {
-        return firstBlock.text();
-    }
-    return QString();
 }
 
 //=============================================================================

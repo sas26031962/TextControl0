@@ -14,7 +14,7 @@
 class cLoadFiles
 {
     //Атрибуты
-    QTextBrowser * TextBrowser;
+    QTextBrowser * TextBrowserLF;
 
 public:
     static bool IsLinux;
@@ -26,12 +26,9 @@ public:
     QString qsProgramPath;
 
     //Конструкторы
-    cLoadFiles(QTextBrowser * TextBrowser);
+    cLoadFiles(QTextBrowser * text_browser);
 
     //Методы
-    void clearLines();
-    void appEndItem(QString s);
-    QString getFirstLineFromDocument(QTextBrowser *textBrowser);
 
     static bool saveStringListToFile(const QString& fileName, const QStringList& list);
     static QStringList loadStringListFromFile(const QString& fileName);
