@@ -17,11 +17,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    classes/cloadfiles.cpp
+    classes/cloadfiles.cpp \
+    classes/cparameters.cpp
 
 HEADERS  += mainwindow.h \
     classes/cloadfiles.h \
-    classes/stvarmem.h
+    classes/stvarmem.h \
+    classes/cparameters.h
 
 FORMS    += mainwindow.ui
 

@@ -22,3 +22,7 @@ programm/qrc_resource.cpp
 programm/ui_mainwindow.h
 
 programm/data/Screenshot1.txt
+
+programm/debug/moc_cparameters.cpp
+
+mainwindow.cpp.autosave

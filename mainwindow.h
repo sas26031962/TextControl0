@@ -18,6 +18,7 @@
 
 #include "classes/cloadfiles.h"
 #include "classes/stvarmem.h"
+#include "classes/cparameters.h"
 
 namespace Ui {
 class MainWindow;
@@ -32,9 +33,9 @@ class MainWindow : public QMainWindow
     varMem<int> vmCurrentListIndex;
     int ListCount = 0;
 
-    QString qsParametersFileName = "/data/Parameters.txt";
+    cParameters * ParametersInstance;
+
     QString qsIniFilePath = "/settings.ini";
-    QStringList qslParameters;
     QStringList qslCategories;
 
 public:
@@ -73,11 +74,9 @@ void execActionSwapParts(bool x);
 void execActionSelectNextString(bool x);
 void execActionSelectPreviousString(bool x);
 void execActionStoreString(bool x);
-void execActionAppendToList(bool x);
 void execActionSeparateStrings(bool x);
 void execActionProcessString(bool x);
 void execActionRevert(bool x);
-void execActionAppendToParameterList();
 void execActionCtrlV();
 
 signals:

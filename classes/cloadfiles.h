@@ -21,9 +21,11 @@ public:
     static bool IsWindows;
     static bool IsUTF8;
     static bool IsWindows1251;
+    static QString qsProgramPath;
+
+    static QString qsSourceFileName;
 
     QStringList qslListIn;
-    QString qsProgramPath;
 
     //Конструкторы
     cLoadFiles(QTextBrowser * text_browser);
@@ -32,8 +34,10 @@ public:
 
     static bool saveStringListToFile(const QString& fileName, const QStringList& list);
     static QStringList loadStringListFromFile(const QString& fileName);
-    int loadStringsFromFile(const QString& fileName);
+    static QString storeTargetFile(QStringList qslListOut);
 
+    int loadSourceFile();
+    int loadStringsFromFile(const QString& fileName);
 };
 
 #endif // CLOADFILES_H

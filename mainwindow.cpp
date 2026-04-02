@@ -13,6 +13,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     LoadFiles = new cLoadFiles(ui->textBrowserData);
 
+    ParametersInstance = new cParameters(
+        ui->LineEditParameter,
+        ui->comboBoxParameter,
+        ui->comboBoxCategories
+        );
+    connect(ParametersInstance, &cParameters::setStatus, this, &MainWindow::execSetStatus);
+
     connect(this, &MainWindow::setStatus, this, &MainWindow::execSetStatus);
     connect(ui->actionLoadFromFile, &QAction::triggered, this, &MainWindow::execActionLoadFromFile);
     connect(ui->actionRemoveSquareBrackets, &QAction::triggered, this, &MainWindow::execActionRemoveSquareBrackets);
@@ -45,13 +52,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QString qsDirectory = fileInfo.path();
     if(cLoadFiles::IsLinux)
     {
-        LoadFiles->qsProgramPath = qsDirectory;
+        cLoadFiles::qsProgramPath = qsDirectory;
         qsCtorMessage = "Ctor > OS Linux detected";
     }
     else if(cLoadFiles::IsWindows)
     {
         int x = qsDirectory.lastIndexOf('/');
-        LoadFiles->qsProgramPath = qsDirectory.mid(0, x);
+        cLoadFiles::qsProgramPath = qsDirectory.mid(0, x);
         qsCtorMessage = "Ctor > OS Windows detected";
     }
     else
@@ -60,28 +67,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     }
 
-    qDebug() << "Path to programm directory:" << LoadFiles->qsProgramPath;
+    qDebug() << "Path to programm directory:" << cLoadFiles::qsProgramPath;
 
-    qsParametersFileName = LoadFiles->qsProgramPath + qsParametersFileName;
-    qsIniFilePath = LoadFiles->qsProgramPath + qsIniFilePath;//20260313-1
+    qsIniFilePath = cLoadFiles::qsProgramPath + qsIniFilePath;
 
     //=========================================================================
     //---Actions---
     //
-    connect(ui->comboBoxParameter, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),this, [=](int value){
-        QString s = ui->comboBoxParameter->itemText(value);
-        qDebug() << "ComboBoxParameterIndexChanged:" << value << " Text=" << s;
-        ui->LineEditParameter->setText(s);
-    });
-    //---
-    //20260315 Вызов данной опции только через меню
-//    QPushButton * pbLoadFile = new QPushButton("Загрузка");
-//    pbLoadFile->setCursor(Qt::PointingHandCursor);
-//    connect(pbLoadFile, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-//        qDebug() << "PushButton 'Load' click";
-//        execActionLoadFromFile(false);
-//    });
-//    ui->statusBar->addWidget(pbLoadFile);
 
     //---
     //20260306 Вызов данной опции только через меню
@@ -175,15 +167,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addWidget(pbNextString);
     //---
 
-    connect(ui->pushButtonAppend, &QPushButton::pressed, this, &MainWindow::execActionAppendToParameterList);
+    connect(ui->pushButtonAppend, &QPushButton::pressed, ParametersInstance, &cParameters::execActionAppendToParameterList);
 
-//    QPushButton * pbInsertToList = new QPushButton("Доб.в список");
-//    pbInsertToList->setCursor(Qt::PointingHandCursor);
-//    connect(pbInsertToList, static_cast<void(QPushButton::*)()>(&QPushButton::pressed),this, [this](){
-//        qDebug() << "PushButton 'Append to list' click";
-//        execActionAppendToList(false);
-//    });
-//    ui->statusBar->addWidget(pbInsertToList);
     //---
 
     //---Выбор кодировки---
@@ -208,9 +193,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionLoadParameters, &QAction::triggered, this, [this](bool checked) {
         if (checked)
         {
-            qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
-            ui->comboBoxParameter->clear();
-            ui->comboBoxParameter->addItems(qslParameters);
+            ParametersInstance->loadItemsFromFile();
 
             qDebug() << "execActionLoadParameters";
         }
@@ -238,6 +221,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qslCategories.append("Цикл произведений");
     qslCategories.append("Произведение");
     qslCategories.append("Чтец");
+    qslCategories.append("Жанр");
 
     ui->comboBoxCategories->addItems(qslCategories);
     ui->comboBoxCategories->setCurrentIndex(0);
@@ -247,9 +231,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->radioButtonUTF8->setChecked(utf8);
 
     //Загрузка параметров из файла
-    qslParameters = cLoadFiles::loadStringListFromFile(qsParametersFileName);
-    ui->comboBoxParameter->clear();
-    ui->comboBoxParameter->addItems(qslParameters);
+    ParametersInstance->loadItemsFromFile();
+
     //Загрузка данных для обработки
     execActionLoadFromFile(false);
     //Установка курсора
@@ -314,9 +297,20 @@ void MainWindow::execActionProcessString(bool x)
         QVector<int> * qvOutput = new QVector<int>();
         QString info = "execActionProcessString:\n";
         //---
-        foreach (auto qsParameter, qslParameters)
+        foreach (QString qsParameter, ParametersInstance->qslParameters)
         {
             //qDebug() << "->Parameter:" << qsParameter;
+            //+
+            QString string = "";
+            if(qsParameter[0] == '#')
+            {
+                string = qsParameter.mid(2);
+            }
+            else
+            {
+                string = qsParameter;
+            }
+            //+
             qvOutput->clear();
 
             int index = 0;//Индекс первого вхождения подстроки
@@ -328,19 +322,18 @@ void MainWindow::execActionProcessString(bool x)
                 if(qvOutput->count() > 0)
                 {
                     //---
-                    index = qsTail.indexOf(qsParameter);
+                    index = qsTail.indexOf(string);//+
 
                     if(index >= 0)
                     {
                         //---20260312
                         qsTail.insert(index, '[');
                         qsTail.insert(index + 1, '[');
-                        qsTail.insert(index + qsParameter.length() + 2, ']');
-                        qsTail.insert(index + qsParameter.length() + 3, ']');
+                        qsTail.insert(index + string.length() + 2, ']');
+                        qsTail.insert(index + string.length() + 3, ']');
                         qDebug() << "Branch1: Tail=" << qsTail;
                         //---
-                        //qsTail = qsTail.mid(index + qsParameter.length());//old
-                        qsTail = qsTail.mid(index + qsParameter.length() + 4);//new
+                        qsTail = qsTail.mid(index + string.length() + 4);//new
                         qvOutput->append(index);
 
                         info += "X=";
@@ -352,19 +345,18 @@ void MainWindow::execActionProcessString(bool x)
                 else
                 {
                     //---
-                    index = qsSource.indexOf(qsParameter);
+                    index = qsSource.indexOf(string);
 
                     if(index >= 0)
                     {
                         //---20260312
                         qsSource.insert(index, '[');
                         qsSource.insert(index + 1, '[');
-                        qsSource.insert(index + qsParameter.length() + 2, ']');
-                        qsSource.insert(index + qsParameter.length() + 3, ']');
+                        qsSource.insert(index + string.length() + 2, ']');
+                        qsSource.insert(index + string.length() + 3, ']');
                         ui->LineEditSource->setText(qsSource);
                         //---
-                        //qsTail = qsSource.mid(index + qsParameter.length());//old
-                        qsTail = qsSource.mid(index + qsParameter.length() + 4);//new
+                        qsTail = qsSource.mid(index + string.length() + 4);//new
                         qvOutput->append(index);
 
                         info += "X=";
@@ -384,7 +376,7 @@ void MainWindow::execActionProcessString(bool x)
                 if(index >= 0)
                 {
                     info += "Parameter=";
-                    info += qsParameter;
+                    info += string;
                     info += "\n";
                 }
             }//End of while(index >= 0)
@@ -403,7 +395,7 @@ void MainWindow::execActionCtrlV()
 {
     QClipboard *clipboard = QApplication::clipboard();
     QString textFromClipboard = clipboard->text();
-    ui->LineEditParameter->setText(textFromClipboard);
+    ParametersInstance->qleParameterIncoming->setText(textFromClipboard);
 
 }
 
@@ -412,12 +404,13 @@ void MainWindow::execActionLoadFromFile(bool x)
 {
     if(!x)
     {
-        QString info = "execActionLoadFiles() > ";
-        QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
-        info += "FileName=";
-        info += qsFileName;
+        int n = LoadFiles->loadSourceFile();
 
-        int n = LoadFiles->loadStringsFromFile(qsFileName);
+        QString info = "execActionLoadFromFile() > ";
+        info += "FileName=";
+        info += cLoadFiles::qsProgramPath;
+        info += LoadFiles->qsSourceFileName;
+
         if(n > 0)
         {
             ListCount = n;
@@ -454,11 +447,8 @@ void MainWindow::execActionRemoveSquareBrackets(bool x)
         setCursorPlace();
 
         //Сохранение результата в файл
-        QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
-        bool result = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
+        info += LoadFiles->storeTargetFile(qslListOut);
 
-        info += "Save result ";
-        if(result)info += "Ok"; else info += "Failure";
         emit setStatus(info);
     }
 }
@@ -470,7 +460,7 @@ void MainWindow::execActionEmbraceSquareBrackets(bool x)
         QString info = "execActionEmbraceSquareBrackets";
         //---
         QString qsSource = ui->LineEditSource->text();
-        QString qsParameter = ui->LineEditParameter->text();
+        QString qsParameter = ParametersInstance->qleParameterIncoming->text();
         if(qsParameter.count() > 0)
         {
             QVector<int> * qvOutput = new QVector<int>();
@@ -544,10 +534,8 @@ void MainWindow::execActionSwapParts(bool x)
     if(!x)
     {
         QString info = "execActionSwapParts\n";
-        QString result = swapNameFamily(ui->LineEditParameter->text());
-        ui->LineEditParameter->setText(result);
-        //info += "Result=";
-        //info += result;
+        QString result = swapNameFamily(ParametersInstance->qleParameterIncoming->text());
+        ParametersInstance->qleParameterIncoming->setText(result);
         emit setStatus(info);
     }
 }
@@ -557,7 +545,7 @@ void MainWindow::execActionSearchPattern(bool x)
     QString info = "execActionSearchPattern:";
     //---
     QString qsSource = ui->LineEditSource->text();
-    QString qsParameter = ui->LineEditParameter->text();
+    QString qsParameter = ParametersInstance->qleParameterIncoming->text();
     if(qsParameter.count())
     {
         QVector<int> * qvOutput = new QVector<int>();
@@ -710,11 +698,7 @@ void MainWindow::execActionStoreString(bool x)
         LoadFiles->qslListIn.replace(vmCurrentListIndex.Current, s);
 
         //Сохранение результата в файл
-        QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
-        bool result = cLoadFiles::saveStringListToFile(qsFileName, LoadFiles->qslListIn);
-
-        info += "Save result ";
-        if(result)info += "Ok"; else info += "Failure";
+        info += LoadFiles->storeTargetFile(LoadFiles->qslListIn);
 
         //Замена строки в блоке на экране
         ui->textBrowserData->clear();
@@ -727,50 +711,6 @@ void MainWindow::execActionStoreString(bool x)
         //---
         emit setStatus(info);
     }
-}
-
-void MainWindow::execActionAppendToList(bool x)
-{
-    if(!x)
-    {
-        execActionAppendToParameterList();
-    }
-}
-
-void MainWindow::execActionAppendToParameterList()
-{
-    QString info = "MainWindow > Append to Parameter list:";
-    //---
-    QString s = ui->LineEditParameter->text();
-    if(s.length() > 0)
-    {
-        if(qslParameters.contains(s))
-        {
-            info += s;
-            info += " exist in this list, nothing to do!";
-        }
-        else
-        {
-            qslParameters.append(s);
-            bool x = cLoadFiles::saveStringListToFile(qsParametersFileName, qslParameters);
-            ui->comboBoxParameter->addItem(s);
-            info += s;
-            info += ", strings count=";
-            info += QString::number(ui->comboBoxParameter->count());
-            if(x)
-            {
-                info += " stored to file:";
-                info += qsParametersFileName;
-            }
-        }
-    }
-    else
-    {
-        info += " empty string, nothing to do";
-    }
-
-    //---
-    emit setStatus(info);
 }
 
 
@@ -823,15 +763,7 @@ void MainWindow::execActionSeparateStrings(bool x)
         LoadFiles->qslListIn = qslListOut;
 
         //Запись в файл
-        QString qsFileName = LoadFiles->qsProgramPath + "/data/Text.txt";
-        bool x = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
-        info += ", strings count=";
-        info += QString::number(qslListOut.count());
-        if(x)
-        {
-            info += " stored to file:";
-            info += qsParametersFileName;
-        }
+        info += LoadFiles->storeTargetFile(qslListOut);
         //---
         emit setStatus(info);
     }
@@ -974,13 +906,24 @@ bool MainWindow::setCursorPlace()
     QList<QTextLayout::FormatRange> formats;
     QTextCharFormat f;
 
-    foreach (auto str, qslParameters)
+    foreach (QString qsParameter, ParametersInstance->qslParameters)
     {
-        PlaceInstance.x = s.indexOf(str);
+        //+
+        QString string = "";
+        if(qsParameter[0] == '#')
+        {
+            string = qsParameter.mid(2);
+        }
+        else
+        {
+            string = qsParameter;
+        }
+        //+
+        PlaceInstance.x = s.indexOf(string);
         if(PlaceInstance.x >= 0 )//!!! 20260320
         {
-            qDebug() << "Parameter=" << str << ": x=" << PlaceInstance.x << " len=" << PlaceInstance.len;
-            PlaceInstance.len = str.length();
+            qDebug() << "Parameter=" << string << ": x=" << PlaceInstance.x << " len=" << PlaceInstance.len;
+            PlaceInstance.len = string.length();
 
             f.setFontWeight(QFont::Bold);
             f.setForeground(Qt::blue);

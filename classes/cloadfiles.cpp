@@ -4,6 +4,8 @@ bool cLoadFiles::IsLinux = false;
 bool cLoadFiles::IsWindows = false;
 bool cLoadFiles::IsUTF8 = false;
 bool cLoadFiles::IsWindows1251 = true;
+QString cLoadFiles::qsProgramPath;
+QString cLoadFiles::qsSourceFileName = "/data/Text.txt";
 
 
 cLoadFiles::cLoadFiles(QTextBrowser * text_browser)
@@ -102,3 +104,25 @@ QStringList cLoadFiles::loadStringListFromFile(const QString& fileName)
 
 //=============================================================================
 
+QString cLoadFiles::storeTargetFile(QStringList qslListOut)
+{
+    QString qsFileName = cLoadFiles::qsProgramPath + qsSourceFileName;
+    bool x = cLoadFiles::saveStringListToFile(qsFileName, qslListOut);
+    QString info = "";
+    info += ", strings count=";
+    info += QString::number(qslListOut.count());
+    info += " stored to file:";
+    info += qsFileName;
+    if(x) info += " Ok"; else info += " Failure!";
+
+    return info;
+}
+
+//=============================================================================
+
+int cLoadFiles::loadSourceFile()
+{
+    QString qsFileName = cLoadFiles::qsProgramPath + qsSourceFileName;
+    int n = loadStringsFromFile(qsFileName);
+    return n;
+}
