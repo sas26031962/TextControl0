@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    qDebug() << "Имя файла:" << fileInfo.fileName();
 //    qDebug() << "Базовое имя (без расширения):" << fileInfo.completeBaseName();
 //    qDebug() << "Суффикс (расширение):" << fileInfo.suffix();
-//    qDebug() << "Абсолютный путь:" << fileInfo.absoluteFilePath();
+    qDebug() << "Абсолютный путь:" << fileInfo.absoluteFilePath();
 //    qDebug() << "Канонический путь:" << fileInfo.canonicalFilePath();
 
     // Определение конкретной ОС
@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     #endif
 
     QString qsDirectory = fileInfo.path();
+    qDebug() << "FileInfoPath:" << qsDirectory;
     if(cLoadFiles::IsLinux)
     {
         cLoadFiles::qsProgramPath = qsDirectory;
