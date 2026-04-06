@@ -234,6 +234,13 @@ MainWindow::MainWindow(QWidget *parent) :
     //Загрузка параметров из файла
     ParametersInstance->loadItemsFromFile();
 
+    ActionProcessString = new cActionProcessString(
+        LoadFiles,
+        ParametersInstance,
+        ui->LineEditSource
+        );
+    connect(ActionProcessString, &cActionProcessString::setStatus, this, &MainWindow::execSetStatus);
+
     //Загрузка данных для обработки
     execActionLoadFromFile(false);
     //Установка курсора
@@ -291,6 +298,8 @@ void MainWindow::execActionProcessString(bool x)
 {
     if(!x)
     {
+        ActionProcessString->exec(vmCurrentListIndex.Current);
+    /*
         //Поиск параметра в строке
         QString qsSource = LoadFiles->qslListIn.at(vmCurrentListIndex.Current);
         //QString qsSource = ui->LineEditSource->text();
@@ -389,6 +398,7 @@ void MainWindow::execActionProcessString(bool x)
         //---
 
         emit setStatus(info);
+    */
     }
 }//End of void MainWindow::execActionProcessString(bool x)
 

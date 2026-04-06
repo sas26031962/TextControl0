@@ -19,6 +19,7 @@
 #include "classes/cloadfiles.h"
 #include "classes/stvarmem.h"
 #include "classes/cparameters.h"
+#include "classes/cactionprocessstring.h"
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +38,8 @@ class MainWindow : public QMainWindow
 
     QString qsIniFilePath = "/settings.ini";
     QStringList qslCategories;
+
+    cActionProcessString * ActionProcessString;
 
 public:
     //Конструкторы

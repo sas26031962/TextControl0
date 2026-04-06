@@ -18,12 +18,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     classes/cloadfiles.cpp \
-    classes/cparameters.cpp
+    classes/cparameters.cpp \
+    classes/cactionprocessstring.cpp
 
 HEADERS  += mainwindow.h \
     classes/cloadfiles.h \
     classes/stvarmem.h \
-    classes/cparameters.h
+    classes/cparameters.h \
+    classes/cactionprocessstring.h
 
 FORMS    += mainwindow.ui
 
