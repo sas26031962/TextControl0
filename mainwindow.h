@@ -20,6 +20,7 @@
 #include "classes/stvarmem.h"
 #include "classes/cparameters.h"
 #include "classes/cactionprocessstring.h"
+#include "classes/cactionembracesquarebrackets.h"
 
 namespace Ui {
 class MainWindow;
@@ -40,6 +41,7 @@ class MainWindow : public QMainWindow
     QStringList qslCategories;
 
     cActionProcessString * ActionProcessString;
+    cActionEmbraceSquareBrackets * ActionEmbraceSquareBrackets;
 
 public:
     //Конструкторы
