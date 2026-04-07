@@ -34,3 +34,5 @@ programm/debug/moc_cactionembracesquarebrackets.cpp
 programm/object_script.TextControl0.Debug
 
 programm/object_script.TextControl0.Release
+
+programm/debug/moc_cactionremoveallsquarebracketandcolontodefis.cpp
