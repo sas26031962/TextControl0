@@ -20,14 +20,16 @@ SOURCES += main.cpp\
     classes/cloadfiles.cpp \
     classes/cparameters.cpp \
     classes/cactionprocessstring.cpp \
-    classes/cactionembracesquarebrackets.cpp
+    classes/cactionembracesquarebrackets.cpp \
+    classes/cactionremoveallsquarebracketandcolontodefis.cpp
 
 HEADERS  += mainwindow.h \
     classes/cloadfiles.h \
     classes/stvarmem.h \
     classes/cparameters.h \
     classes/cactionprocessstring.h \
-    classes/cactionembracesquarebrackets.h
+    classes/cactionembracesquarebrackets.h \
+    classes/cactionremoveallsquarebracketandcolontodefis.h
 
 FORMS    += mainwindow.ui
 

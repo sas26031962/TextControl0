@@ -21,6 +21,7 @@
 #include "classes/cparameters.h"
 #include "classes/cactionprocessstring.h"
 #include "classes/cactionembracesquarebrackets.h"
+#include "classes/cactionremoveallsquarebracketandcolontodefis.h"
 
 namespace Ui {
 class MainWindow;
@@ -42,6 +43,8 @@ class MainWindow : public QMainWindow
 
     cActionProcessString * ActionProcessString;
     cActionEmbraceSquareBrackets * ActionEmbraceSquareBrackets;
+    cActionRemoveAllSquareBracketAndColonToDefis * ActionRemoveAllSquareBracketAndColonToDefis;
+
 
 public:
     //Конструкторы
@@ -50,7 +53,6 @@ public:
 
     //Методы
     bool setCursorPlace();
-    QString removeSquareBracketAndColonToDefis(QString s);
 
 protected:
     void closeEvent(QCloseEvent * event);
@@ -72,7 +74,7 @@ void setLineEditTextFormat(QLineEdit *lineEdit, const QList<QTextLayout::FormatR
 private slots:
 void execSetStatus(QString s);
 void execActionLoadFromFile(bool x);
-void execActionRemoveSquareBrackets(bool x);
+void execActionRemoveAllSquareBracketAndColonToDefis(bool x);
 void execActionEmbraceSquareBrackets(bool x);
 void execActionSearchPattern(bool x);
 void execActionSwapParts(bool x);

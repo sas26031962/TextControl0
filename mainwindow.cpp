@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, &MainWindow::setStatus, this, &MainWindow::execSetStatus);
     connect(ui->actionLoadFromFile, &QAction::triggered, this, &MainWindow::execActionLoadFromFile);
-    connect(ui->actionRemoveSquareBrackets, &QAction::triggered, this, &MainWindow::execActionRemoveSquareBrackets);
+    connect(ui->actionRemoveSquareBrackets, &QAction::triggered, this, &MainWindow::execActionRemoveAllSquareBracketAndColonToDefis);
     connect(ui->actionSeparateStrings, &QAction::triggered, this, &MainWindow::execActionSeparateStrings);
 
     QString appPath = QCoreApplication::applicationFilePath();
@@ -242,10 +242,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ActionProcessString, &cActionProcessString::setStatus, this, &MainWindow::execSetStatus);
 
     ActionEmbraceSquareBrackets = new cActionEmbraceSquareBrackets(
-         ParametersInstance,
-         ui->LineEditSource
-         );
+        ParametersInstance,
+        ui->LineEditSource
+        );
     connect(ActionEmbraceSquareBrackets, &cActionEmbraceSquareBrackets::setStatus, this, &MainWindow::execSetStatus);
+
+    ActionRemoveAllSquareBracketAndColonToDefis = new cActionRemoveAllSquareBracketAndColonToDefis(
+        ui->textBrowserData,
+        LoadFiles
+        );
+    connect(ActionRemoveAllSquareBracketAndColonToDefis, &cActionRemoveAllSquareBracketAndColonToDefis::setStatus, this, &MainWindow::execSetStatus);
 
     //Загрузка данных для обработки
     execActionLoadFromFile(false);
@@ -343,30 +349,15 @@ void MainWindow::execActionLoadFromFile(bool x)
     }
 }
 
-void MainWindow::execActionRemoveSquareBrackets(bool x)
+void MainWindow::execActionRemoveAllSquareBracketAndColonToDefis(bool x)
 {
     if(!x)
     {
-        QString info = "execActionRemoveSquareBrackets() > ";
-        QStringList qslListOut;
-        qslListOut.clear();
-        ui->textBrowserData->clear();
-
-        foreach (auto s, LoadFiles->qslListIn)
-        {
-            QString sOut = removeSquareBracketAndColonToDefis(s);
-            qslListOut.append(sOut);
-            ui->textBrowserData->append(sOut);
-        }
+        ActionRemoveAllSquareBracketAndColonToDefis->exec();
 
         //Установка курсора на начало текста
         vmCurrentListIndex.install(0);
         setCursorPlace();
-
-        //Сохранение результата в файл
-        info += LoadFiles->storeTargetFile(qslListOut);
-
-        emit setStatus(info);
     }
 }
 
@@ -650,49 +641,6 @@ void  MainWindow::closeEvent(QCloseEvent * event)
 
         //---
     }
-}
-
-QString MainWindow::removeSquareBracketAndColonToDefis(QString s)
-{
-    QString qsOut = "";
-    int ColonIndex = s.indexOf(':');
-    int LeftBracketIndex = s.indexOf('[');
-    int RightBracketIndex = s.indexOf(']');
-    QString Acc = "";
-    if(ColonIndex > 0)
-    {
-        Acc = s.mid(0,ColonIndex);
-        Acc.append(" -");
-        qDebug() << "Head=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(ColonIndex + 1, (LeftBracketIndex - ColonIndex - 1));
-        qDebug() << "Neck=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(LeftBracketIndex + 1, (RightBracketIndex - LeftBracketIndex - 1));
-        qDebug() << "Middle=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(RightBracketIndex + 1);
-        qDebug() << "Tail=" << Acc;
-        qsOut += Acc;
-    }
-    else
-    {
-        Acc = s.mid(0,LeftBracketIndex);
-        qDebug() << "Head=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(LeftBracketIndex + 1, (RightBracketIndex - LeftBracketIndex - 1));
-        qDebug() << "Middle=" << Acc;
-        qsOut += Acc;
-
-        Acc = s.mid(RightBracketIndex + 1);
-        qDebug() << "Tail=" << Acc;
-        qsOut += Acc;
-    }
-    return qsOut;
 }
 
 bool MainWindow::safeColorLine(QTextBrowser *textBrowser, int lineNumber, const QColor &color)
